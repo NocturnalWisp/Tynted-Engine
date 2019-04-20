@@ -12,7 +12,7 @@ namespace GameTest
 	{
 		static void Main(string[] args)
 		{
-			using (TestGame game = new TestGame())
+			using (TestGame game = new TestGame(GameOptions.Default))
 			{
 				game.Run();
 			}

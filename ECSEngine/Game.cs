@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SFML;
 using SFML.Window;
 using SFML.Graphics;
+using SFML.System;
 
 namespace ECSEngine
 {
@@ -14,9 +15,27 @@ namespace ECSEngine
 	{
 		RenderWindow window;
 
+		private Time elapsedTime;
+		public Time ElapsedTime { get => elapsedTime; }
+
+		GameOptions gameOptions;
+		GameTime gameTime;
+
+		public Game(GameOptions options)
+		{
+			gameOptions = options;
+		}
+
 		public void Run()
 		{
 			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
+
+			if (gameOptions.forceLimit)
+			{
+				window.SetFramerateLimit(60);
+
+				Console.WriteLine("Boo");
+			}
 
 			window.Closed += WindowClosed;
 
@@ -34,11 +53,18 @@ namespace ECSEngine
 		{
 			Initialize();
 
+			Clock deltaClock = new Clock();
+			Clock totalTime = new Clock();
+
 			while (window.IsOpen)
 			{
 				window.DispatchEvents();
 
-				Update();
+				//Time stamps
+				gameTime.elapsedTime = deltaClock.Restart();
+				gameTime.totalTime = totalTime.ElapsedTime;
+
+				Update(gameTime);
 
 				window.Clear(Color.Black);
 
@@ -53,7 +79,7 @@ namespace ECSEngine
 
 		}
 
-		protected virtual void Update()
+		protected virtual void Update(GameTime deltaTime)
 		{
 
 		}

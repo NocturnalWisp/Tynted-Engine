@@ -13,6 +13,11 @@ namespace GameTest
 {
 	class TestGame : Game
 	{
+		public TestGame(GameOptions options) : base(options)
+		{
+
+		}
+
 		protected override void Initialize()
 		{
 
@@ -20,11 +25,11 @@ namespace GameTest
 			base.Initialize();
 		}
 
-		protected override void Update()
+		protected override void Update(GameTime gameTime)
 		{
 
 
-			base.Update();
+			base.Update(gameTime);
 		}
 
 		protected override void Draw(RenderWindow window)
