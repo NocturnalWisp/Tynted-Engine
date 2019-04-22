@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SFML.Graphics;
-using SFML.System;
+using ECSEngine;
+
+using ECSEngine;
+
 
 using ECSEngine.Components;
+using ECSEngine.SFML.Graphics;
 
-namespace ECSEngine.Systems
+namespace ECSEngine.Audio.Systems
 {
 	class SpriteRenderer : System
 	{

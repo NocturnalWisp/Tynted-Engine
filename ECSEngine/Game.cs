@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-using SFML;
-using SFML.Window;
-using SFML.Graphics;
-using SFML.System;
+using ECSEngine;
+using ECSEngine.SFML.Graphics;
+using ECSEngine.SFML.System;
+using ECSEngine.SFML.Window;
 
 namespace ECSEngine
 {

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SFML.System;
-using SFML.Graphics;
-
 using ECSEngine;
 using ECSEngine.Components;
+using ECSEngine.SFML.Graphics;
+using ECSEngine.SFML.System;
 
 namespace GameTest
 {
@@ -32,7 +31,7 @@ namespace GameTest
 
 		protected override void Update(GameTime gameTime)
 		{
-			Console.WriteLine(1/gameTime.elapsedTime.AsSeconds());
+
 
 			base.Update(gameTime);
 		}

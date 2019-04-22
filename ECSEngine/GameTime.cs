@@ -1,4 +1,6 @@
-﻿using SFML.System;
+﻿using ECSEngine;
+using ECSEngine.SFML.System;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

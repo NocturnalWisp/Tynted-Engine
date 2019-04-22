@@ -35,20 +35,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SFML.Audio, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFML.Audio.2.5.0\lib\netstandard2.0\SFML.Audio.dll</HintPath>
-    </Reference>
-    <Reference Include="SFML.Graphics, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFML.Graphics.2.5.0\lib\netstandard2.0\SFML.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="SFML.System, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFML.System.2.5.0\lib\netstandard2.0\SFML.System.dll</HintPath>
-    </Reference>
-    <Reference Include="SFML.Window, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFML.Window.2.5.0\lib\netstandard2.0\SFML.Window.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,6 +52,112 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameOptions.cs" />
     <Compile Include="GameTime.cs" />
+    <Compile Include="Physics\Collision\BroadPhase.cs" />
+    <Compile Include="Physics\Collision\Collision.CollideCircle.cs" />
+    <Compile Include="Physics\Collision\Collision.CollideEdge.cs" />
+    <Compile Include="Physics\Collision\Collision.CollidePoly.cs" />
+    <Compile Include="Physics\Collision\Collision.cs" />
+    <Compile Include="Physics\Collision\Collision.Distance.cs" />
+    <Compile Include="Physics\Collision\Collision.TimeOfImpact.cs" />
+    <Compile Include="Physics\Collision\PairManager.cs" />
+    <Compile Include="Physics\Collision\Shapes\CircleShape.cs" />
+    <Compile Include="Physics\Collision\Shapes\EdgeShape.cs" />
+    <Compile Include="Physics\Collision\Shapes\PolygonShape.cs" />
+    <Compile Include="Physics\Collision\Shapes\Shape.cs" />
+    <Compile Include="Physics\Common\Mar33.cs" />
+    <Compile Include="Physics\Common\Mat22.cs" />
+    <Compile Include="Physics\Common\Math.cs" />
+    <Compile Include="Physics\Common\Settings.cs" />
+    <Compile Include="Physics\Common\Sweep.cs" />
+    <Compile Include="Physics\Common\Transform.cs" />
+    <Compile Include="Physics\Common\Utils.cs" />
+    <Compile Include="Physics\Common\Vec2.cs" />
+    <Compile Include="Physics\Common\Vec3.cs" />
+    <Compile Include="Physics\Common\XForm.cs" />
+    <Compile Include="Physics\Dynamics\Body.cs" />
+    <Compile Include="Physics\Dynamics\ContactManager.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\CircleContact.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\Contact.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\ContactSolver.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\EdgeAndCircleContact.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\NullContact.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\PolyAndCircleContact.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\PolyAndEdgeContact.cs" />
+    <Compile Include="Physics\Dynamics\Contacts\PolyContact.cs" />
+    <Compile Include="Physics\Dynamics\Controllers\BuoyancyController.cs" />
+    <Compile Include="Physics\Dynamics\Controllers\ConstantAccelController.cs" />
+    <Compile Include="Physics\Dynamics\Controllers\ConstantForceController.cs" />
+    <Compile Include="Physics\Dynamics\Controllers\Controller.cs" />
+    <Compile Include="Physics\Dynamics\Controllers\GravityController.cs" />
+    <Compile Include="Physics\Dynamics\Controllers\TensorDampingController.cs" />
+    <Compile Include="Physics\Dynamics\Fixture.cs" />
+    <Compile Include="Physics\Dynamics\Island.cs" />
+    <Compile Include="Physics\Dynamics\Joints\DistanceJoint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\GearJoint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\Joint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\LineJoint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\MouseJoint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\PrismaticJoint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\PulleyJoint.cs" />
+    <Compile Include="Physics\Dynamics\Joints\RevoluteJoint.cs" />
+    <Compile Include="Physics\Dynamics\World.cs" />
+    <Compile Include="Physics\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="SFML\SFML.Audio\Listener.cs" />
+    <Compile Include="SFML\SFML.Audio\Music.cs" />
+    <Compile Include="SFML\SFML.Audio\Sound.cs" />
+    <Compile Include="SFML\SFML.Audio\SoundBuffer.cs" />
+    <Compile Include="SFML\SFML.Audio\SoundBufferRecorder.cs" />
+    <Compile Include="SFML\SFML.Audio\SoundRecorder.cs" />
+    <Compile Include="SFML\SFML.Audio\SoundStream.cs" />
+    <Compile Include="SFML\SFML.Graphics\BlendMode.cs" />
+    <Compile Include="SFML\SFML.Graphics\CircleShape.cs" />
+    <Compile Include="SFML\SFML.Graphics\Color.cs" />
+    <Compile Include="SFML\SFML.Graphics\ConvexShape.cs" />
+    <Compile Include="SFML\SFML.Graphics\Drawable.cs" />
+    <Compile Include="SFML\SFML.Graphics\Font.cs" />
+    <Compile Include="SFML\SFML.Graphics\Glsl.cs" />
+    <Compile Include="SFML\SFML.Graphics\Glyph.cs" />
+    <Compile Include="SFML\SFML.Graphics\Image.cs" />
+    <Compile Include="SFML\SFML.Graphics\PrimitiveType.cs" />
+    <Compile Include="SFML\SFML.Graphics\Rect.cs" />
+    <Compile Include="SFML\SFML.Graphics\RectangleShape.cs" />
+    <Compile Include="SFML\SFML.Graphics\RenderStates.cs" />
+    <Compile Include="SFML\SFML.Graphics\RenderTarget.cs" />
+    <Compile Include="SFML\SFML.Graphics\RenderTexture.cs" />
+    <Compile Include="SFML\SFML.Graphics\RenderWindow.cs" />
+    <Compile Include="SFML\SFML.Graphics\Shader.cs" />
+    <Compile Include="SFML\SFML.Graphics\Shape.cs" />
+    <Compile Include="SFML\SFML.Graphics\Sprite.cs" />
+    <Compile Include="SFML\SFML.Graphics\Text.cs" />
+    <Compile Include="SFML\SFML.Graphics\Texture.cs" />
+    <Compile Include="SFML\SFML.Graphics\Transform.cs" />
+    <Compile Include="SFML\SFML.Graphics\Transformable.cs" />
+    <Compile Include="SFML\SFML.Graphics\Vertex.cs" />
+    <Compile Include="SFML\SFML.Graphics\VertexArray.cs" />
+    <Compile Include="SFML\SFML.Graphics\VertexBuffer.cs" />
+    <Compile Include="SFML\SFML.Graphics\View.cs" />
+    <Compile Include="SFML\SFML.System\Clock.cs" />
+    <Compile Include="SFML\SFML.System\LoadingFailedException.cs" />
+    <Compile Include="SFML\SFML.System\ObjectBase.cs" />
+    <Compile Include="SFML\SFML.System\SharedLibName.cs" />
+    <Compile Include="SFML\SFML.System\StreamAdaptor.cs" />
+    <Compile Include="SFML\SFML.System\Time.cs" />
+    <Compile Include="SFML\SFML.System\Vector2.cs" />
+    <Compile Include="SFML\SFML.System\Vector3.cs" />
+    <Compile Include="SFML\SFML.Window\Clipboard.cs" />
+    <Compile Include="SFML\SFML.Window\Context.cs" />
+    <Compile Include="SFML\SFML.Window\ContextSettings.cs" />
+    <Compile Include="SFML\SFML.Window\Cursor.cs" />
+    <Compile Include="SFML\SFML.Window\Event.cs" />
+    <Compile Include="SFML\SFML.Window\EventArgs.cs" />
+    <Compile Include="SFML\SFML.Window\Joystick.cs" />
+    <Compile Include="SFML\SFML.Window\Keyboard.cs" />
+    <Compile Include="SFML\SFML.Window\LoadingFailedException.cs" />
+    <Compile Include="SFML\SFML.Window\Mouse.cs" />
+    <Compile Include="SFML\SFML.Window\Sensor.cs" />
+    <Compile Include="SFML\SFML.Window\Touch.cs" />
+    <Compile Include="SFML\SFML.Window\VideoMode.cs" />
+    <Compile Include="SFML\SFML.Window\Window.cs" />
     <Compile Include="System.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemManager.cs" />
@@ -72,15 +167,24 @@
     <Content Include="Art\AirShip.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="csfml-audio.dll" />
-    <Content Include="csfml-graphics.dll" />
-    <Content Include="csfml-network.dll" />
-    <Content Include="csfml-system.dll" />
-    <Content Include="csfml-window.dll" />
+    <EmbeddedResource Include="csfml-audio.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="csfml-graphics.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="csfml-network.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="csfml-system.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="csfml-window.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
