@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 using SFML;
 using SFML.Window;
@@ -28,6 +29,22 @@ namespace ECSEngine
 
 		public void Run()
 		{
+			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+			{
+				//Grabs the components from the Assembly
+				if (typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent))
+				{
+					SystemManager.AddComponent((IComponent)Activator.CreateInstance(type));
+					Console.WriteLine("Added component: " + type);
+				}
+				//Grabs the Systems from the Assembly
+				else if (type.IsSubclassOf(typeof(System)))
+				{
+					SystemManager.AddSystem((System)Activator.CreateInstance(type));
+					Console.WriteLine("Added system: " + type);
+				}
+			}
+
 			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
 
 			if (gameOptions.forceLimit)
@@ -74,21 +91,35 @@ namespace ECSEngine
 			}
 		}
 
+		/// <summary>
+		/// Place all entity and system initialization here.
+		/// </summary>
 		protected virtual void Initialize()
 		{
 
 		}
 
-		protected virtual void Update(GameTime deltaTime)
+		/// <summary>
+		/// The update method that runs through all the systems and updates them.
+		/// </summary>
+		/// <param name="gameTime">The time tool to get various variables</param>
+		protected virtual void Update(GameTime gameTime)
 		{
-
+			SystemManager.Update(gameTime);
 		}
 
+		/// <summary>
+		/// The draw method that loops through each system and draws them.
+		/// </summary>
+		/// <param name="renderWindow">The window to draw them in.</param>
 		protected virtual void Draw(RenderWindow renderWindow)
 		{
-
+			SystemManager.Draw(renderWindow);
 		}
 
+		/// <summary>
+		/// Callback when the game window is closed.
+		/// </summary>
 		protected virtual void OnClosed()
 		{
 

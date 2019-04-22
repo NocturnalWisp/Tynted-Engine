@@ -57,13 +57,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Transform.cs" />
+    <Compile Include="Components\SpriteRenderee.cs" />
+    <Compile Include="IComponent.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameOptions.cs" />
     <Compile Include="GameTime.cs" />
+    <Compile Include="System.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <Compile Include="SystemManager.cs" />
+    <Compile Include="Systems\SpriteRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Art\AirShip.png">
@@ -78,5 +81,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
