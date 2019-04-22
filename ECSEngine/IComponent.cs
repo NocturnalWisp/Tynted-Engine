@@ -8,6 +8,6 @@ namespace ECSEngine
 {
 	public interface IComponent
 	{
-
+		bool Enabled { get; set; }
 	}
 }

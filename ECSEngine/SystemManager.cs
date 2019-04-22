@@ -69,6 +69,13 @@ namespace ECSEngine
 			}
 		}
 
+		public static Dictionary<int, IComponent> GetComponentEntityActiveList(IComponent component)
+		{
+			var dict = components.First(o => o.Key.GetType() == component.GetType()).Value;
+			dict = dict.Where(o => o.Value.Enabled).Distinct().ToDictionary(o => o.Key, o => o.Value);
+			return dict;
+		}
+
 		public static Dictionary<int, IComponent> GetComponentEntityList(IComponent component)
 		{
 			return components.First(o => o.Key.GetType() == component.GetType()).Value;
@@ -97,6 +104,26 @@ namespace ECSEngine
 				{
 					components.First(o => o.Key.GetType() == component.GetType()).Value.Remove(entityID);
 				}
+			}
+		}
+
+		public static T GetEntityComponent<T>(int entityID) where T : IComponent
+		{
+			//make component exists
+			if (components.Where(o => o.Key.GetType() == typeof(T)).Count() == 1)
+			{
+				return (T)components.First(o => o.Key.GetType() == typeof(T)).Value[entityID];
+			}
+
+			return default(T);
+		}
+
+		public static void SetEntityComponent(int entityID, IComponent component)
+		{
+			//make component exists
+			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 1)
+			{
+				components.First(o => o.Key.GetType() == component.GetType()).Value[entityID] = component;
 			}
 		}
 

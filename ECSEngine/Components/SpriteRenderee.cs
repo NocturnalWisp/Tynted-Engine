@@ -11,6 +11,8 @@ namespace ECSEngine.Components
 {
 	public struct SpriteRenderee : IComponent
 	{
+		public bool Enabled { get; set; }
+
 		Texture texture;
 		public Sprite sprite;
 
@@ -18,6 +20,7 @@ namespace ECSEngine.Components
 		{
 			this.texture = texture;
 			sprite = new Sprite(texture);
+			Enabled = true;
 		}
 	}
 }

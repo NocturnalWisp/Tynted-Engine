@@ -11,11 +11,15 @@ namespace ECSEngine.Components
 {
 	public struct Transform : IComponent
 	{
+		public bool Enabled { get; set; }
+
 		public Vector2f position;
 
 		public Transform(Vector2f position)
 		{
 			this.position = position;
+
+			Enabled = true;
 		}
 	}
 }

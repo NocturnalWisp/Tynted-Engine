@@ -31,7 +31,9 @@ namespace GameTest
 
 		protected override void Update(GameTime gameTime)
 		{
-
+			ECSEngine.Components.Transform t = SystemManager.GetEntityComponent<ECSEngine.Components.Transform>(1);
+			t.position += new Vector2f(1, 1);
+			SystemManager.SetEntityComponent(1, t);
 
 			base.Update(gameTime);
 		}
