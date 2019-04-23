@@ -19,7 +19,7 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-using System; using System.Numerics;
+using System;
 using System.Numerics;
 using Box2DNet.Common;
 using Box2DNet.Collision;

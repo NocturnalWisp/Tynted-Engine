@@ -6,13 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ECSEngine;
-
-using ECSEngine;
-
-
 using ECSEngine.Components;
 using ECSEngine.SFML.Graphics;
 using ECSEngine.SFML.System;
+
+using Box2DNet.Common;
 
 namespace ECSEngine.Systems
 {
@@ -28,8 +26,11 @@ namespace ECSEngine.Systems
 				if (transforms.ContainsKey(entityID))
 				{
 					SpriteRenderee sRenderee = (SpriteRenderee)spriteRenderees[entityID];
+					Components.Transform transform = (Components.Transform)transforms[entityID];
 					window.Draw(sRenderee.sprite);
-					sRenderee.sprite.Position = ((Components.Transform)transforms[entityID]).position;
+					sRenderee.sprite.Position = transform.position;
+					sRenderee.sprite.Rotation = transform.rotation;
+					sRenderee.sprite.Scale = transform.scale;
 				}
 			}
 

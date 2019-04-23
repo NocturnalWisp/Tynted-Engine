@@ -96,7 +96,7 @@ namespace ECSEngine
 		/// </summary>
 		protected virtual void Initialize()
 		{
-
+			SystemManager.Initialize();
 		}
 
 		/// <summary>

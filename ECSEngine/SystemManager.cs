@@ -15,6 +15,16 @@ namespace ECSEngine
 
 		static Dictionary<IComponent, Dictionary<int, IComponent>> components = new Dictionary<IComponent, Dictionary<int, IComponent>>();
 
+		//TODO: Create a list of events here that systems can create and others can subscribe to.
+
+		public static void Initialize()
+		{
+			foreach (System system in systems)
+			{
+				system.Initialize();
+			}
+		}
+
 		public static void Update(GameTime gameTime)
 		{
 			foreach (System system in systems)
@@ -53,6 +63,7 @@ namespace ECSEngine
 			return components.Keys.ToList();
 		}
 
+		//TODO: use type instead to stop so many objects being created
 		public static void AddComponent(IComponent component)
 		{
 			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 0)
@@ -90,6 +101,23 @@ namespace ECSEngine
 				if (!GetComponentEntityList(component).ContainsKey(entityID))
 				{
 					components.First(o => o.Key.GetType() == component.GetType()).Value.Add(entityID, component);
+				}
+			}
+		}
+
+		public static void RegisterEntityComponents(List<KeyValuePair<int, IComponent>> entityComponents)
+		{
+			foreach (KeyValuePair<int, IComponent> entityComponent in entityComponents)
+			{
+				//make sure it has component
+				if (components.Where(o => o.Key.GetType() == entityComponent.Value.GetType()).Count() == 1)
+				{
+					//make sure entity does not already exist
+					if (!GetComponentEntityList(entityComponent.Value).ContainsKey(entityComponent.Key))
+					{
+						components.First(o => o.Key.GetType() == entityComponent.Value.GetType())
+							.Value.Add(entityComponent.Key, entityComponent.Value);
+					}
 				}
 			}
 		}

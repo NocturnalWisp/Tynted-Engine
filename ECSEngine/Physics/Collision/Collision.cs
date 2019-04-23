@@ -363,6 +363,12 @@ namespace Box2DNet.Collision
 		/// </summary>
 		public Vector2 UpperBound;
 
+		public AABB(Vector2 lower, Vector2 upper)
+		{
+			LowerBound = lower;
+			UpperBound = upper;
+		}
+
 		/// Verify that the bounds are sorted.
 		public bool IsValid
 		{

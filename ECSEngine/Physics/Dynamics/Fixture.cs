@@ -335,7 +335,7 @@ namespace Box2DNet.Dynamics
 					break;
 
 				default:
-										break;
+					break;
 			}
 
 			// Create proxy in the broad-phase.

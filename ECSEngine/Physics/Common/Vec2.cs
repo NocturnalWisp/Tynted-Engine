@@ -19,6 +19,7 @@
 using System; using System.Numerics;
 using System.Collections.Generic;
 using System.Text;
+using ECSEngine.SFML.System;
 
 namespace Box2DNet.Common
 {
@@ -66,6 +67,12 @@ namespace Box2DNet.Common
 		{
 			X = x;
 			Y = y;
+		}
+
+		public Vec2(Vector2f vector2)
+		{
+			X = vector2.X;
+			Y = vector2.Y;
 		}
 
 		/// <summary>
@@ -170,7 +177,24 @@ namespace Box2DNet.Common
 			return a.X != b.X || a.Y != b.Y;
 		}
 
+		public static implicit operator Vector2f(Vec2 vector)
+		{
+			return new Vector2f(vector.X, vector.Y);
+		}
+
+		public static implicit operator Vector2(Vec2 vector)
+		{
+			return new Vector2(vector.X, vector.Y);
+		}
+
+		public static implicit operator Vec2(Vector2 vector)
+		{
+			return new Vec2(vector.X, vector.Y);
+		}
+
 		public static Vec2 Zero { get { return new Vec2(0, 0); } }
+
+		public static Vec2 One { get { return new Vec2(1, 1); } }
 
 		/// <summary>
 		/// Peform the dot product on two vectors.
