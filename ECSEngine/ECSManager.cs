@@ -12,6 +12,9 @@ namespace ECSEngine
 {
 	public class ECSManager
 	{
+		static List<EntityData> entities = new List<EntityData>();
+		static int nextEntity = 0;
+
 		static List<System> systems = new List<System>();
 
 		static Dictionary<IComponent, Dictionary<int, IComponent>> components = new Dictionary<IComponent, Dictionary<int, IComponent>>();
@@ -105,6 +108,31 @@ namespace ECSEngine
 			return components.First(o => o.Key.GetType() == component.GetType()).Value;
 		}
 
+		public static void CreateEntity(string name, string tag = "Default")
+		{
+			entities.Add(new EntityData(nextEntity, name, tag));
+			nextEntity++;
+		}
+
+		public static void AddEntityComponent(string entityName, IComponent component)
+		{
+			//make sure component exists
+			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 1)
+			{
+				EntityData eData = entities.Find(o => o.Name == entityName);
+
+				//Make sure data exists
+				if (!eData.Equals(default(EntityData)))
+				{
+					//make sure entity does not already exist
+					if (!GetComponentEntityList(component).ContainsKey(eData.EntityID))
+					{
+						components.First(o => o.Key.GetType() == component.GetType()).Value.Add(eData.EntityID, component);
+					}
+				}
+			}
+		}
+
 		public static void AddEntityComponent(int entityID, IComponent component)
 		{
 			//make sure it has component
@@ -118,18 +146,28 @@ namespace ECSEngine
 			}
 		}
 
-		public static void RegisterEntityComponents(List<KeyValuePair<int, IComponent>> entityComponents)
+		public static void RegisterEntityComponents(List<KeyValuePair<string, IComponent>> entityComponents)
 		{
-			foreach (KeyValuePair<int, IComponent> entityComponent in entityComponents)
+			foreach (KeyValuePair<string, IComponent> entityComponent in entityComponents)
 			{
-				//make sure it has component
-				if (components.Where(o => o.Key.GetType() == entityComponent.Value.GetType()).Count() == 1)
+				AddEntityComponent(entityComponent.Key, entityComponent.Value);
+			}
+		}
+
+		public static void RemoveEntityComponent(string entityName, IComponent component)
+		{
+			//make sure component exists
+			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 1)
+			{
+				EntityData eData = entities.Find(o => o.Name == entityName);
+
+				//Make sure data exists
+				if (!eData.Equals(default(EntityData)))
 				{
-					//make sure entity does not already exist
-					if (!GetComponentEntityList(entityComponent.Value).ContainsKey(entityComponent.Key))
+					//make sure entity component already exists
+					if (GetComponentEntityList(component).ContainsKey(eData.EntityID))
 					{
-						components.First(o => o.Key.GetType() == entityComponent.Value.GetType())
-							.Value.Add(entityComponent.Key, entityComponent.Value);
+						components.First(o => o.Key.GetType() == component.GetType()).Value.Remove(eData.EntityID);
 					}
 				}
 			}
@@ -140,12 +178,29 @@ namespace ECSEngine
 			//make sure it has component
 			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 1)
 			{
-				//make sure entity already exist
+				//make sure entity component already exist
 				if (GetComponentEntityList(component).ContainsKey(entityID))
 				{
 					components.First(o => o.Key.GetType() == component.GetType()).Value.Remove(entityID);
 				}
 			}
+		}
+
+		public static T GetEntityComponent<T>(string entityName) where T : IComponent
+		{
+			//make component exists
+			if (components.Where(o => o.Key.GetType() == typeof(T)).Count() == 1)
+			{
+				EntityData eData = entities.Find(o => o.Name == entityName);
+
+				//make sure entity exists
+				if (!eData.Equals(default(EntityData)))
+				{
+					return (T)components.First(o => o.Key.GetType() == typeof(T)).Value[eData.EntityID];
+				}
+			}
+
+			return default(T);
 		}
 
 		public static T GetEntityComponent<T>(int entityID) where T : IComponent
@@ -159,6 +214,21 @@ namespace ECSEngine
 			return default(T);
 		}
 
+		public static void SetEntityComponent(string entityName, IComponent component)
+		{
+			//make component exists
+			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 1)
+			{
+				EntityData eData = entities.Find(o => o.Name == entityName);
+
+				//make sure entity exists
+				if (!eData.Equals(default(EntityData)))
+				{
+					components.First(o => o.Key.GetType() == component.GetType()).Value[eData.EntityID] = component;
+				}
+			}
+		}
+
 		public static void SetEntityComponent(int entityID, IComponent component)
 		{
 			//make component exists
@@ -168,17 +238,49 @@ namespace ECSEngine
 			}
 		}
 
+		public static void RemoveAllEntityComponents(string entityName)
+		{
+			List<IComponent> componentList = components.Keys.ToList();
+			for (int i = componentList.Count-1; i >= 0; i--)
+			{
+				EntityData eData = entities.Find(o => o.Name == entityName);
+
+				//make sure entity exists
+				if (!eData.Equals(default(EntityData)))
+				{
+					RemoveEntityComponent(eData.EntityID, componentList[i]);
+				}
+			}
+		}
+
 		public static void RemoveAllEntityComponents(int entityID)
 		{
 			List<IComponent> componentList = components.Keys.ToList();
+			for (int i = componentList.Count-1; i >= 0; i--)
+			{
+				RemoveEntityComponent(entityID, componentList[i]);
+			}
+		}
+
+		public static List<IComponent> GetEntityComponents(string entityName)
+		{
+			List<IComponent> componentList = components.Keys.ToList();
+
 			for (int i = 0; i < componentList.Count; i++)
 			{
-				var component = components[componentList[i]];
-				if (component.ContainsKey(entityID))
+				EntityData eData = entities.Find(o => o.Name == entityName);
+
+				//make sure entity exists
+				if (!eData.Equals(default(EntityData)))
 				{
-					components.First(o => o.Key.GetType() == component.GetType()).Value.Remove(entityID);
+					if (!components[componentList[i]].ContainsKey(eData.EntityID))
+					{
+						componentList.RemoveAt(i);
+					}
 				}
 			}
+
+			return componentList;
 		}
 
 		public static List<IComponent> GetEntityComponents(int entityID)

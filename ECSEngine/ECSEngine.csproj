@@ -49,6 +49,7 @@
     <Compile Include="Components\RigidBody.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Components\SpriteRenderee.cs" />
+    <Compile Include="EntityData.cs" />
     <Compile Include="Events\EngineEvents.cs" />
     <Compile Include="Events\EngineActions.cs" />
     <Compile Include="IComponent.cs" />

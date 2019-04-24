@@ -20,14 +20,17 @@ namespace GameTest
 
 		protected override void Initialize()
 		{
-			ECSManager.RegisterEntityComponents(new List<KeyValuePair<int, IComponent>>()
-			{
-				new KeyValuePair<int, IComponent>(0, new SpriteRenderee(new Texture("Art/AirShip.png"))),
-				new KeyValuePair<int, IComponent>(0, new ECSEngine.Components.Transform(new Vec2(1, 1))),
-				new KeyValuePair<int, IComponent>(0, new RigidBody(new Vec2(10, 10), PhysicsManager.World)),
+			ECSManager.CreateEntity("Airship");
+			ECSManager.CreateEntity("Airship2");
 
-				new KeyValuePair<int, IComponent>(1, new SpriteRenderee(new Texture("Art/AirShip.png"))),
-				new KeyValuePair<int, IComponent>(1, new ECSEngine.Components.Transform(new Vec2(300, 300))),
+			ECSManager.RegisterEntityComponents(new List<KeyValuePair<string, IComponent>>()
+			{
+				new KeyValuePair<string, IComponent>("Airship", new SpriteRenderee(new Texture("Art/AirShip.png"))),
+				new KeyValuePair<string, IComponent>("Airship", new ECSEngine.Components.Transform(new Vec2(1, 1))),
+				new KeyValuePair<string, IComponent>("Airship", new RigidBody(new Vec2(10, 10), PhysicsManager.World)),
+
+				new KeyValuePair<string, IComponent>("Airship2", new SpriteRenderee(new Texture("Art/AirShip.png"))),
+				new KeyValuePair<string, IComponent>("Airship2", new ECSEngine.Components.Transform(new Vec2(300, 300))),
 			});
 
 			base.Initialize();
