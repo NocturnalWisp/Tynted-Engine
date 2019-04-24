@@ -375,10 +375,10 @@ namespace ECSEngine.SFML.Window
         ////////////////////////////////////////////////////////////
         public void DispatchEvents()
         {
-            Event e;
-            while (PollEvent(out e))
+			Event ev;
+            while (PollEvent(out ev))
             {
-                CallEventHandler(e);
+                CallEventHandler(ev);
             }
         }
 

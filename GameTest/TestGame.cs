@@ -11,6 +11,9 @@ using ECSEngine.SFML.System;
 
 using Box2DNet.Common;
 using ECSEngine.Systems;
+using ECSEngine.Input;
+using static ECSEngine.SFML.Window.Keyboard;
+using static ECSEngine.SFML.Window.Mouse;
 
 namespace GameTest
 {
@@ -32,21 +35,8 @@ namespace GameTest
 				new KeyValuePair<string, IComponent>("Airship2", new SpriteRenderee(new Texture("Art/AirShip.png"))),
 				new KeyValuePair<string, IComponent>("Airship2", new ECSEngine.Components.Transform(new Vec2(300, 300))),
 			});
-
+			
 			base.Initialize();
-		}
-
-		protected override void Update(GameTime gameTime)
-		{
-
-			base.Update(gameTime);
-		}
-
-		protected override void Draw(RenderWindow window)
-		{
-
-
-			base.Draw(window);
 		}
 	}
 }

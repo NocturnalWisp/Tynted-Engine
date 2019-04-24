@@ -9,6 +9,7 @@ using ECSEngine;
 using ECSEngine.SFML.Graphics;
 using ECSEngine.SFML.System;
 using ECSEngine.SFML.Window;
+using ECSEngine.Input;
 
 namespace ECSEngine
 {
@@ -46,6 +47,8 @@ namespace ECSEngine
 			}
 
 			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
+
+			InputManager.Initialize(window);
 
 			if (gameOptions.forceLimit)
 			{
@@ -86,6 +89,9 @@ namespace ECSEngine
 				Draw(window);
 
 				window.Display();
+
+				//Resets the key bindings that have the just pressed flag
+				InputManager.JustPressedReset();
 			}
 		}
 
