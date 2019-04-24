@@ -16,6 +16,22 @@ namespace ECSEngine
 
 		}
 
+		/// <summary>
+		/// Use this to create all the events that a system will utilize.
+		/// </summary>
+		public virtual void CreateEvents()
+		{
+
+		}
+
+		/// <summary>
+		/// Use this to subscribe to events that have been created.
+		/// </summary>
+		public virtual void SubscribeEvents()
+		{
+
+		}
+
 		public virtual void Update(GameTime gameTime)
 		{
 

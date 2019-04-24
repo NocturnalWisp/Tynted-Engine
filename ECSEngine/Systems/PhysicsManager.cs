@@ -20,11 +20,20 @@ namespace ECSEngine.Systems
 
 		List<RigidBody> rigidbody = new List<RigidBody>();
 
+		EngineEvent<object> collisionEvent;
+
 		public override void Initialize()
 		{
 
 
 			base.Initialize();
+		}
+
+		public override void CreateEvents()
+		{
+			collisionEvent = SystemManager.CreateEvent1Arg("OnCollisionEnter");
+
+			base.CreateEvents();
 		}
 
 		public override void Update(GameTime gameTime)
@@ -45,13 +54,14 @@ namespace ECSEngine.Systems
 					//TODO: Fix box2D implementation
 					AABB aabb;
 					rb.body.GetFixtureList().Shape.ComputeAABB(out aabb, rb.body._xf);
-					Console.WriteLine(aabb.UpperBound);
 
 					t.position = rb.body.GetPosition();
 					transforms[rigidBody.Key] = t;
 					rigidBodies[rigidBody.Key] = rb;
 				}
 			}
+
+			collisionEvent.Invoke();
 
 			base.Update(gameTime);
 		}

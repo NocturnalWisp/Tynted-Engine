@@ -50,8 +50,6 @@ namespace ECSEngine
 			if (gameOptions.forceLimit)
 			{
 				window.SetFramerateLimit(60);
-
-				Console.WriteLine("Boo");
 			}
 
 			window.Closed += WindowClosed;

@@ -16,12 +16,21 @@ namespace ECSEngine
 		static Dictionary<IComponent, Dictionary<int, IComponent>> components = new Dictionary<IComponent, Dictionary<int, IComponent>>();
 
 		//TODO: Create a list of events here that systems can create and others can subscribe to.
+		static Dictionary<string, EngineEvent> events = new Dictionary<string, EngineEvent>();
+		static Dictionary<string, EngineEvent<object>> events1 = new Dictionary<string, EngineEvent<object>>();
 
 		public static void Initialize()
 		{
 			foreach (System system in systems)
 			{
 				system.Initialize();
+
+				system.CreateEvents();
+			}
+
+			foreach (System system in systems)
+			{
+				system.SubscribeEvents();
 			}
 		}
 
@@ -80,6 +89,8 @@ namespace ECSEngine
 			}
 		}
 
+		#endregion
+		#region Entities Utility Functions
 		public static Dictionary<int, IComponent> GetComponentEntityActiveList(IComponent component)
 		{
 			var dict = components.First(o => o.Key.GetType() == component.GetType()).Value;
@@ -182,6 +193,63 @@ namespace ECSEngine
 
 			return componentList;
 		}
+		#endregion
+		#region Event Functions
+		#region Create Events
+		public static EngineEvent CreateEvent(string name)
+		{
+			EngineEvent ev = null;
+
+			if (!events.ContainsKey(name))
+			{
+				ev = new EngineEvent();
+				events[name] = ev;
+			}
+
+			return ev;
+		}
+
+		public static EngineEvent<object> CreateEvent1Arg(string name)
+		{
+			EngineEvent<object> ev = null;
+
+			if (!events.ContainsKey(name))
+			{
+				ev = new EngineEvent<object>();
+				events1[name] = ev;
+			}
+
+			return ev;
+		}
+		#endregion
+
+		#region Subscribe Events
+		public static void SubscribeEvent(string name, EngineAction action)
+		{
+			if (events.ContainsKey(name))
+			{
+				events[name].AddListener(action);
+			}
+		}
+
+		public static void SubscribeEvent(string name, EngineAction<object> action)
+		{
+			if (events.ContainsKey(name))
+			{
+				events1[name].AddListener(action);
+			}
+		}
+		#endregion
+
+		#region Unsubscribe Events
+		public static void UnSubscribeEvent(string name, EngineAction ev)
+		{
+			if (events.ContainsKey(name))
+			{
+				events[name].RemoveListener(ev);
+			}
+		}
+		#endregion
 		#endregion
 	}
 }

@@ -16,6 +16,20 @@ namespace ECSEngine.Systems
 {
 	class SpriteRenderer : System
 	{
+		public override void SubscribeEvents()
+		{
+			//TODO: Fix
+			SystemManager.SubscribeEvent("OnCollisionEnter", new EngineAction<object>(() => CollisionEnter));
+
+			base.SubscribeEvents();
+		}
+
+		public static void CollisionEnter(string yo)
+		{
+			Console.WriteLine("Yo Collisions my man");
+			Console.WriteLine(yo);
+		}
+
 		public override void Draw(RenderWindow window)
 		{
 			var spriteRenderees = SystemManager.GetComponentEntityActiveList(new SpriteRenderee());
