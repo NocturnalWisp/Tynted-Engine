@@ -34,13 +34,13 @@ namespace ECSEngine
 				//Grabs the components from the Assembly
 				if (typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent))
 				{
-					SystemManager.AddComponent((IComponent)Activator.CreateInstance(type));
+					ECSManager.AddComponent((IComponent)Activator.CreateInstance(type));
 					Console.WriteLine("Added component: " + type);
 				}
 				//Grabs the Systems from the Assembly
 				else if (type.IsSubclassOf(typeof(System)))
 				{
-					SystemManager.AddSystem((System)Activator.CreateInstance(type));
+					ECSManager.AddSystem((System)Activator.CreateInstance(type));
 					Console.WriteLine("Added system: " + type);
 				}
 			}
@@ -94,7 +94,7 @@ namespace ECSEngine
 		/// </summary>
 		protected virtual void Initialize()
 		{
-			SystemManager.Initialize();
+			ECSManager.Initialize();
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace ECSEngine
 		/// <param name="gameTime">The time tool to get various variables</param>
 		protected virtual void Update(GameTime gameTime)
 		{
-			SystemManager.Update(gameTime);
+			ECSManager.Update(gameTime);
 		}
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace ECSEngine
 		/// <param name="renderWindow">The window to draw them in.</param>
 		protected virtual void Draw(RenderWindow renderWindow)
 		{
-			SystemManager.Draw(renderWindow);
+			ECSManager.Draw(renderWindow);
 		}
 
 		/// <summary>

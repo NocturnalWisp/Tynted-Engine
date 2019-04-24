@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ECSEngine;
+using ECSEngine.Events;
 using ECSEngine.SFML.Graphics;
 
 namespace ECSEngine
 {
-	public class SystemManager
+	public class ECSManager
 	{
 		static List<System> systems = new List<System>();
 
@@ -18,6 +19,7 @@ namespace ECSEngine
 		//TODO: Create a list of events here that systems can create and others can subscribe to.
 		static Dictionary<string, EngineEvent> events = new Dictionary<string, EngineEvent>();
 		static Dictionary<string, EngineEvent<object>> events1 = new Dictionary<string, EngineEvent<object>>();
+		static Dictionary<string, EngineEvent<object, object>> events2 = new Dictionary<string, EngineEvent<object, object>>();
 
 		public static void Initialize()
 		{
@@ -213,10 +215,23 @@ namespace ECSEngine
 		{
 			EngineEvent<object> ev = null;
 
-			if (!events.ContainsKey(name))
+			if (!events1.ContainsKey(name))
 			{
 				ev = new EngineEvent<object>();
 				events1[name] = ev;
+			}
+
+			return ev;
+		}
+
+		public static EngineEvent<object, object> CreateEvent2Arg(string name)
+		{
+			EngineEvent<object, object> ev = null;
+
+			if (!events2.ContainsKey(name))
+			{
+				ev = new EngineEvent<object, object>();
+				events2[name] = ev;
 			}
 
 			return ev;
@@ -234,9 +249,17 @@ namespace ECSEngine
 
 		public static void SubscribeEvent(string name, EngineAction<object> action)
 		{
-			if (events.ContainsKey(name))
+			if (events1.ContainsKey(name))
 			{
 				events1[name].AddListener(action);
+			}
+		}
+
+		public static void SubscribeEvent(string name, EngineAction<object, object> action)
+		{
+			if (events2.ContainsKey(name))
+			{
+				events2[name].AddListener(action);
 			}
 		}
 		#endregion
@@ -247,6 +270,22 @@ namespace ECSEngine
 			if (events.ContainsKey(name))
 			{
 				events[name].RemoveListener(ev);
+			}
+		}
+
+		public static void UnSubscribeEvent(string name, EngineAction<object> ev)
+		{
+			if (events1.ContainsKey(name))
+			{
+				events1[name].RemoveListener(ev);
+			}
+		}
+
+		public static void UnSubscribeEvent(string name, EngineAction<object, object> ev)
+		{
+			if (events2.ContainsKey(name))
+			{
+				events2[name].RemoveListener(ev);
 			}
 		}
 		#endregion

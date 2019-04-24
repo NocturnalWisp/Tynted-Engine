@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using ECSEngine;
 using ECSEngine.Components;
+using ECSEngine.Events;
 using ECSEngine.SFML.Graphics;
 using ECSEngine.SFML.System;
 
@@ -16,24 +17,10 @@ namespace ECSEngine.Systems
 {
 	class SpriteRenderer : System
 	{
-		public override void SubscribeEvents()
-		{
-			//TODO: Fix
-			SystemManager.SubscribeEvent("OnCollisionEnter", new EngineAction<object>(() => CollisionEnter));
-
-			base.SubscribeEvents();
-		}
-
-		public static void CollisionEnter(string yo)
-		{
-			Console.WriteLine("Yo Collisions my man");
-			Console.WriteLine(yo);
-		}
-
 		public override void Draw(RenderWindow window)
 		{
-			var spriteRenderees = SystemManager.GetComponentEntityActiveList(new SpriteRenderee());
-			var transforms = SystemManager.GetComponentEntityActiveList(new Components.Transform());
+			var spriteRenderees = ECSManager.GetComponentEntityActiveList(new SpriteRenderee());
+			var transforms = ECSManager.GetComponentEntityActiveList(new Components.Transform());
 
 			for (int entityID = 0; entityID < spriteRenderees.Count(); entityID++)
 			{

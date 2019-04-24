@@ -16,14 +16,11 @@ namespace GameTest
 {
 	class TestGame : Game
 	{
-		public TestGame(GameOptions options) : base(options)
-		{
-
-		}
+		public TestGame(GameOptions options) : base(options) { }
 
 		protected override void Initialize()
 		{
-			SystemManager.RegisterEntityComponents(new List<KeyValuePair<int, IComponent>>()
+			ECSManager.RegisterEntityComponents(new List<KeyValuePair<int, IComponent>>()
 			{
 				new KeyValuePair<int, IComponent>(0, new SpriteRenderee(new Texture("Art/AirShip.png"))),
 				new KeyValuePair<int, IComponent>(0, new ECSEngine.Components.Transform(new Vec2(1, 1))),

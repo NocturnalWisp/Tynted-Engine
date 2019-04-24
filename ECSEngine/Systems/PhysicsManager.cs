@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ECSEngine.Components;
+using ECSEngine.Events;
 
 using Box2DNet.Dynamics;
 using Box2DNet.Common;
@@ -20,18 +21,11 @@ namespace ECSEngine.Systems
 
 		List<RigidBody> rigidbody = new List<RigidBody>();
 
-		EngineEvent<object> collisionEvent;
-
-		public override void Initialize()
-		{
-
-
-			base.Initialize();
-		}
+		EngineEvent<object, object> collisionEvent;
 
 		public override void CreateEvents()
 		{
-			collisionEvent = SystemManager.CreateEvent1Arg("OnCollisionEnter");
+			collisionEvent = ECSManager.CreateEvent2Arg("OnCollisionEnter");
 
 			base.CreateEvents();
 		}
@@ -40,8 +34,8 @@ namespace ECSEngine.Systems
 		{
 			world.Step(gameTime.elapsedTime.AsSeconds(), 8, 3);
 
-			Dictionary<int, IComponent> rigidBodies = SystemManager.GetComponentEntityActiveList(new RigidBody());
-			Dictionary<int, IComponent> transforms = SystemManager.GetComponentEntityActiveList(new Components.Transform());
+			Dictionary<int, IComponent> rigidBodies = ECSManager.GetComponentEntityActiveList(new RigidBody());
+			Dictionary<int, IComponent> transforms = ECSManager.GetComponentEntityActiveList(new Components.Transform());
 
 			foreach (KeyValuePair<int, IComponent> rigidBody in rigidBodies.ToDictionary(x => x.Key, x => x.Value))
 			{
@@ -60,8 +54,6 @@ namespace ECSEngine.Systems
 					rigidBodies[rigidBody.Key] = rb;
 				}
 			}
-
-			collisionEvent.Invoke();
 
 			base.Update(gameTime);
 		}
