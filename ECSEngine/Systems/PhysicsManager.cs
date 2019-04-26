@@ -37,7 +37,7 @@ namespace ECSEngine.Systems
 			Dictionary<int, IComponent> rigidBodies = ECSManager.GetComponentEntityActiveList(new RigidBody());
 			Dictionary<int, IComponent> transforms = ECSManager.GetComponentEntityActiveList(new Components.Transform());
 
-			foreach (KeyValuePair<int, IComponent> rigidBody in rigidBodies.ToDictionary(x => x.Key, x => x.Value))
+			foreach (KeyValuePair<int, IComponent> rigidBody in rigidBodies)
 			{
 				RigidBody rb = (RigidBody)rigidBody.Value;
 
@@ -45,13 +45,8 @@ namespace ECSEngine.Systems
 				{
 					Components.Transform t = (Components.Transform)transforms[rigidBody.Key];
 
-					//TODO: Fix box2D implementation
-					AABB aabb;
-					rb.body.GetFixtureList().Shape.ComputeAABB(out aabb, rb.body._xf);
-
 					t.position = rb.body.GetPosition();
 					transforms[rigidBody.Key] = t;
-					rigidBodies[rigidBody.Key] = rb;
 				}
 			}
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Reflection;
 
 using ECSEngine;
@@ -10,6 +10,7 @@ using ECSEngine.SFML.Graphics;
 using ECSEngine.SFML.System;
 using ECSEngine.SFML.Window;
 using ECSEngine.Input;
+using ECSEngine.Components;
 
 namespace ECSEngine
 {

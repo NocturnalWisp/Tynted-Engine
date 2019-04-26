@@ -32,7 +32,7 @@ namespace ECSEngine.Components
 			velocity = initialVelocity;
 			this.mass = mass;
 
-			body = world.CreateBody(new BodyDef() { LinearVelocity = velocity, IsSleeping = false, IsBullet = false, AllowSleep = false });
+			body = world.CreateBody(new BodyDef() { LinearVelocity = velocity, MassData = new MassData() { Mass = mass } });
 
 			if (shape == default(Shape))
 			{

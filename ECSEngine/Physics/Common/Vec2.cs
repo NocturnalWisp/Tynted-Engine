@@ -179,17 +179,17 @@ namespace Box2DNet.Common
 
 		public static implicit operator Vector2f(Vec2 vector)
 		{
-			return new Vector2f(vector.X, vector.Y);
+			return new Vector2f(vector.X + 0f, vector.Y + 0f);
 		}
 
 		public static implicit operator Vector2(Vec2 vector)
 		{
-			return new Vector2(vector.X, vector.Y);
+			return new Vector2(vector.X + 0f, vector.Y + 0f);
 		}
 
 		public static implicit operator Vec2(Vector2 vector)
 		{
-			return new Vec2(vector.X, vector.Y);
+			return new Vec2(vector.X + 0f, vector.Y + 0f);
 		}
 
 		public static Vec2 Zero { get { return new Vec2(0, 0); } }

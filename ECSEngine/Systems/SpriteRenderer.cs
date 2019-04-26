@@ -32,6 +32,8 @@ namespace ECSEngine.Systems
 					sRenderee.sprite.Position = transform.position;
 					sRenderee.sprite.Rotation = transform.rotation;
 					sRenderee.sprite.Scale = transform.scale;
+
+					spriteRenderees[entityID] = sRenderee;
 				}
 			}
 

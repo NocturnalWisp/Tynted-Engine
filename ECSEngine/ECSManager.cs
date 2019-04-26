@@ -17,7 +17,7 @@ namespace ECSEngine
 
 		static List<System> systems = new List<System>();
 
-		static Dictionary<IComponent, Dictionary<int, IComponent>> components = new Dictionary<IComponent, Dictionary<int, IComponent>>();
+		static List<Component<IComponent>> components = new List<Component<IComponent>>();
 
 		//TODO: Create a list of events here that systems can create and others can subscribe to.
 		static Dictionary<string, EngineEvent> events = new Dictionary<string, EngineEvent>();
@@ -72,40 +72,38 @@ namespace ECSEngine
 			}
 		}
 
-		public static List<IComponent> GetComponents()
+		public static List<Component<IComponent>> GetComponents()
 		{
-			return components.Keys.ToList();
+			return components.ToList();
 		}
-
-		//TODO: use type instead to stop so many objects being created
-		public static void AddComponent(IComponent component)
+		
+		public static void AddComponent<T>() where T : IComponent
 		{
-			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 0)
+			//Make sure component doesn't already exist
+			if (components.Where(o => o.GetType() == typeof(T)).Count() == 0)
 			{
-				components.Add((IComponent)Activator.CreateInstance(component.GetType()), new Dictionary<int, IComponent>());
+				components.Add(new Component<IComponent>());
 			}
 		}
 
-		public static void RemoveComponent(IComponent component)
+		public static void RemoveComponent<T>() where T : IComponent
 		{
-			if (components.Where(o => o.Key.GetType() == component.GetType()).Count() == 1)
+			if (components.Where(o => o.GetType() == typeof(T)).Count() == 1)
 			{
-				components.Remove(components.First(o => o.Key.GetType() == component.GetType()).Key);
+				components.Remove(components.First(o => o.GetType() == typeof(T)));
 			}
 		}
 
 		#endregion
 		#region Entities Utility Functions
-		public static Dictionary<int, IComponent> GetComponentEntityActiveList(IComponent component)
+		public static List<EntityComponent> GetComponentEntityActiveList<T>() where T : IComponent
 		{
-			var dict = components.First(o => o.Key.GetType() == component.GetType()).Value;
-			dict = dict.Where(o => o.Value.Enabled).Distinct().ToDictionary(o => o.Key, o => o.Value);
-			return dict;
+			return (List<EntityComponent>)components.First(o => o.GetType() == typeof(T)).entityComponents.Where(o => o.component.Enabled);
 		}
 
-		public static Dictionary<int, IComponent> GetComponentEntityList(IComponent component)
+		public static List<EntityComponent> GetComponentEntityList<T>() where T : IComponent
 		{
-			return components.First(o => o.Key.GetType() == component.GetType()).Value;
+			return components.First(o => o.GetType() == typeof(T)).entityComponents;
 		}
 
 		public static void CreateEntity(string name, string tag = "Default")
