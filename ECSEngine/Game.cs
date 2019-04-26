@@ -36,13 +36,15 @@ namespace ECSEngine
 				//Grabs the components from the Assembly
 				if (typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent))
 				{
-					ECSManager.AddComponent((IComponent)Activator.CreateInstance(type));
+					type.GetMethod("AddComponent").MakeGenericMethod()
+						.Invoke(typeof(ECSManager), new object[] { });
 					Console.WriteLine("Added component: " + type);
 				}
 				//Grabs the Systems from the Assembly
 				else if (type.IsSubclassOf(typeof(System)))
 				{
-					ECSManager.AddSystem((System)Activator.CreateInstance(type));
+					type.GetMethod("AddSystem").MakeGenericMethod()
+						.Invoke(typeof(ECSManager), new object[] { });
 					Console.WriteLine("Added system: " + type);
 				}
 			}

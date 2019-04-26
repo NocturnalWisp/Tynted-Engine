@@ -15,5 +15,11 @@ namespace ECSEngine
 	{
 		internal int entityID;
 		internal IComponent component;
+
+		public EntityComponent(int entityID, IComponent component)
+		{
+			this.entityID = entityID;
+			this.component = component;
+		}
 	}
 }

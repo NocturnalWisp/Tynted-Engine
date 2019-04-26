@@ -19,21 +19,24 @@ namespace ECSEngine.Systems
 	{
 		public override void Draw(RenderWindow window)
 		{
-			var spriteRenderees = ECSManager.GetComponentEntityActiveList(new SpriteRenderee());
-			var transforms = ECSManager.GetComponentEntityActiveList(new Components.Transform());
+			var spriteRenderees = ECSManager.GetComponentEntityActiveList<SpriteRenderee>();
+			var transforms = ECSManager.GetComponentEntityActiveList<Components.Transform>();
 
 			for (int entityID = 0; entityID < spriteRenderees.Count(); entityID++)
 			{
-				if (transforms.ContainsKey(entityID))
+				if (transforms.Exists(o => o.entityID == entityID))
 				{
-					SpriteRenderee sRenderee = (SpriteRenderee)spriteRenderees[entityID];
-					Components.Transform transform = (Components.Transform)transforms[entityID];
+					EntityComponent rComponent = spriteRenderees.Find(o => o.entityID == entityID);
+					EntityComponent tComponent = transforms.Find(o => o.entityID == entityID);
+					SpriteRenderee sRenderee = (SpriteRenderee)rComponent.component;
+					Components.Transform transform = (Components.Transform)tComponent.component;
 					window.Draw(sRenderee.sprite);
 					sRenderee.sprite.Position = transform.position;
 					sRenderee.sprite.Rotation = transform.rotation;
 					sRenderee.sprite.Scale = transform.scale;
 
-					spriteRenderees[entityID] = sRenderee;
+					rComponent.component = sRenderee;
+					spriteRenderees[spriteRenderees.IndexOf(spriteRenderees.Find(o => o.entityID == entityID))] = rComponent;
 				}
 			}
 

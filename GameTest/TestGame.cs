@@ -34,14 +34,14 @@ namespace GameTest
 
 			shipShape.SetAsBox(sprite.Size.X, sprite.Size.Y);
 
-			ECSManager.RegisterEntityComponents(new List<KeyValuePair<string, IComponent>>()
+			ECSManager.RegisterEntityComponents(new List<EntityComponent>()
 			{
-				new KeyValuePair<string, IComponent>("Airship", new SpriteRenderee(sprite)),
-				new KeyValuePair<string, IComponent>("Airship", new ECSEngine.Components.Transform(new Vec2(1, 1))),
-				new KeyValuePair<string, IComponent>("Airship", new RigidBody(new Vec2(10, 10), PhysicsManager.World, 1, shipShape)),
+				new EntityComponent(0, new SpriteRenderee(sprite)),
+				new EntityComponent(0, new ECSEngine.Components.Transform(new Vec2(1, 1))),
+				new EntityComponent(0, new RigidBody(new Vec2(10, 10), PhysicsManager.World, 1, shipShape)),
 
-				new KeyValuePair<string, IComponent>("Airship2", new SpriteRenderee(sprite)),
-				new KeyValuePair<string, IComponent>("Airship2", new ECSEngine.Components.Transform(new Vec2(300, 300))),
+				new EntityComponent(1, new SpriteRenderee(sprite)),
+				new EntityComponent(1, new ECSEngine.Components.Transform(new Vec2(300, 300))),
 			});
 			
 			base.Initialize();

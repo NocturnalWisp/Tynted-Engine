@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component.cs" />
     <Compile Include="Components\RigidBody.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Components\SpriteRenderee.cs" />

@@ -34,19 +34,22 @@ namespace ECSEngine.Systems
 		{
 			world.Step(gameTime.elapsedTime.AsSeconds(), 8, 3);
 
-			Dictionary<int, IComponent> rigidBodies = ECSManager.GetComponentEntityActiveList(new RigidBody());
-			Dictionary<int, IComponent> transforms = ECSManager.GetComponentEntityActiveList(new Components.Transform());
+			var rigidBodies = ECSManager.GetComponentEntityActiveList<RigidBody>();
+			var transforms = ECSManager.GetComponentEntityActiveList<Components.Transform>();
 
-			foreach (KeyValuePair<int, IComponent> rigidBody in rigidBodies)
+			foreach (EntityComponent rigidBody in rigidBodies)
 			{
-				RigidBody rb = (RigidBody)rigidBody.Value;
+				RigidBody rb = (RigidBody)rigidBody.component;
 
 				if (rb.mass > 0)
 				{
-					Components.Transform t = (Components.Transform)transforms[rigidBody.Key];
+					EntityComponent tComponent = transforms.Find(o => o.entityID == rigidBody.entityID);
+					Components.Transform t = (Components.Transform)tComponent.component;
 
 					t.position = rb.body.GetPosition();
-					transforms[rigidBody.Key] = t;
+					tComponent.component = t;
+
+					transforms[transforms.IndexOf(transforms.Find(o => o.entityID == rigidBody.entityID))] = tComponent;
 				}
 			}
 
