@@ -40,6 +40,9 @@ namespace Box2DNet.Collision
 			int count2 = poly2._vertexCount;
 			Vector2[] vertices2 = poly2._vertices;
 
+			//This fixed it, not sure why it was broken
+			if (normals1.Length - 1 <= edge1 || edge1 < 0)
+				return 0;
 			
 			// Convert normal from poly1's frame into poly2's frame.
 			Vector2 normal1World = xf1.TransformDirection(normals1[edge1]);

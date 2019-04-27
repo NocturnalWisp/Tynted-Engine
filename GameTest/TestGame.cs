@@ -25,23 +25,26 @@ namespace GameTest
 
 		protected override void Initialize()
 		{
+			//TODO: Something weird occurs when one is disabled and the second is enabled.
+			//They seem to not be grabbing the right component?
 			ECSManager.CreateEntity("Airship");
 			ECSManager.CreateEntity("Airship2");
 
-			Texture sprite = new Texture("Art/AirShip.png");
+			Texture sprite = new Texture("Resources/Art/AirShip.png");
 
 			PolygonShape shipShape = new PolygonShape();
 
 			shipShape.SetAsBox(sprite.Size.X, sprite.Size.Y);
 
-			ECSManager.RegisterEntityComponents(new List<EntityComponent>()
+			ECSManager.RegisterEntityComponents(new List<EntityComponentIdentifier>()
 			{
-				new EntityComponent(0, new SpriteRenderee(sprite)),
-				new EntityComponent(0, new ECSEngine.Components.Transform(new Vec2(1, 1))),
-				new EntityComponent(0, new RigidBody(new Vec2(10, 10), PhysicsManager.World, 1, shipShape)),
+				new EntityComponentIdentifier("Airship", new SpriteRenderee(sprite)),
+				new EntityComponentIdentifier("Airship", new ECSEngine.Components.Transform(new Vec2(0, 0))),
+				new EntityComponentIdentifier("Airship", new RigidBody(new Vec2(100, 100), PhysicsManager.World, 1, shipShape)),
 
-				new EntityComponent(1, new SpriteRenderee(sprite)),
-				new EntityComponent(1, new ECSEngine.Components.Transform(new Vec2(300, 300))),
+				new EntityComponentIdentifier("Airship2", new SpriteRenderee(sprite)),
+				new EntityComponentIdentifier("Airship2", new ECSEngine.Components.Transform(new Vec2(200, 200))),
+				new EntityComponentIdentifier("Airship2", new RigidBody(new Vec2(-100, -100), PhysicsManager.World, 1, shipShape)),
 			});
 			
 			base.Initialize();

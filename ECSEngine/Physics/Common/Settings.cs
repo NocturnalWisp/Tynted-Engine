@@ -126,7 +126,7 @@ namespace Box2DNet.Common
 		/// The maximum linear velocity of a body. This limit is very large and is used
 		/// to prevent numerical problems. You shouldn't need to adjust this.
 		/// </summary>
-		public static readonly float MaxTranslation = 2.0f;
+		public static readonly float MaxTranslation = 10.0f;
 		public static readonly float MaxTranslationSquared = (MaxTranslation * MaxTranslation);
 
 		/// <summary>

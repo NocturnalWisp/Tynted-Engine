@@ -11,6 +11,7 @@ using ECSEngine.SFML.System;
 using ECSEngine.SFML.Window;
 using ECSEngine.Input;
 using ECSEngine.Components;
+using ECSEngine.Systems;
 
 namespace ECSEngine
 {
@@ -29,6 +30,9 @@ namespace ECSEngine
 			gameOptions = options;
 		}
 
+		/// <summary>
+		/// Runs the game.
+		/// </summary>
 		public void Run()
 		{
 			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
@@ -36,16 +40,12 @@ namespace ECSEngine
 				//Grabs the components from the Assembly
 				if (typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent))
 				{
-					type.GetMethod("AddComponent").MakeGenericMethod()
-						.Invoke(typeof(ECSManager), new object[] { });
-					Console.WriteLine("Added component: " + type);
+                    ECSManager.AddComponent(type);
 				}
 				//Grabs the Systems from the Assembly
 				else if (type.IsSubclassOf(typeof(System)))
-				{
-					type.GetMethod("AddSystem").MakeGenericMethod()
-						.Invoke(typeof(ECSManager), new object[] { });
-					Console.WriteLine("Added system: " + type);
+                {
+					ECSManager.AddSystem(type);
 				}
 			}
 
@@ -63,6 +63,11 @@ namespace ECSEngine
 			RunLoop();
 		}
 
+		/// <summary>
+		/// Callback for when the window is closed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void WindowClosed(object sender, EventArgs e)
 		{
 			OnClosed();
@@ -70,6 +75,9 @@ namespace ECSEngine
 			window.Close();
 		}
 
+		/// <summary>
+		/// The game loop.
+		/// </summary>
 		private void RunLoop()
 		{
 			Initialize();
@@ -142,6 +150,7 @@ namespace ECSEngine
 				if (disposing)
 				{
 					// TODO: dispose managed state (managed objects).
+					window = null;
 				}
 
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

@@ -19,8 +19,8 @@ namespace ECSEngine.Systems
 	{
 		public override void Draw(RenderWindow window)
 		{
-			var spriteRenderees = ECSManager.GetComponentEntityActiveList<SpriteRenderee>();
-			var transforms = ECSManager.GetComponentEntityActiveList<Components.Transform>();
+			var spriteRenderees = ECSManager.GetComponentEntityActiveList(typeof(SpriteRenderee));
+			var transforms = ECSManager.GetComponentEntityActiveList(typeof(Components.Transform));
 
 			for (int entityID = 0; entityID < spriteRenderees.Count(); entityID++)
 			{
@@ -38,6 +38,16 @@ namespace ECSEngine.Systems
 					rComponent.component = sRenderee;
 					spriteRenderees[spriteRenderees.IndexOf(spriteRenderees.Find(o => o.entityID == entityID))] = rComponent;
 				}
+			}
+
+			foreach(EntityComponent sr in spriteRenderees)
+			{
+				ECSManager.SetEntityComponent(sr.entityID, sr.component);
+			}
+
+			foreach (EntityComponent t in transforms)
+			{
+				ECSManager.SetEntityComponent(t.entityID, t.component);
 			}
 
 			base.Draw(window);
