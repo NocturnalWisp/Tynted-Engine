@@ -15,7 +15,7 @@ namespace ECSEngine.Systems
 	[GetComponents(typeof(RigidBody), typeof(Transform))]
 	public class PhysicsManager : System
 	{
-		private static World world = new World(new AABB(new Vector2(0, 0), new Vector2(1024, 768)), new Vec2(0, 0), false);
+		private static World world = new World(new AABB(new Vector2(-2000, -2000), new Vector2(2000, 2000)), new Vec2(0, 0), false);
 		public static World World { get => world; }
 
 		EngineEvent<object, object> collisionEvent;

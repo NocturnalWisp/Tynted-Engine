@@ -20,6 +20,15 @@ namespace ECSEngine.Input
 			window.KeyReleased += KeyReleased;
 
 			window.MouseButtonPressed += MousePressed;
+			window.MouseButtonReleased += MousePressed;
+
+			window.JoystickButtonPressed += GamePadButtonPressed;
+			window.JoystickButtonReleased += GamePadButtonReleased;
+		}
+
+		internal static void Update(GameTime gameTime)
+		{
+			Joystick.Update();
 		}
 
 		public static void JustPressedReset()
@@ -60,7 +69,7 @@ namespace ECSEngine.Input
 						if (!kb.IsDown)
 						{
 							kb.IsDown = true;
-							kb.JustPressed = false;
+							kb.JustPressed = true;
 						}
 					}
 				}
@@ -84,7 +93,7 @@ namespace ECSEngine.Input
 						if (kb.IsDown)
 						{
 							kb.IsDown = false;
-							kb.JustPressed = true;
+							kb.JustPressed = false;
 						}
 					}
 				}
@@ -99,13 +108,89 @@ namespace ECSEngine.Input
 			{
 				KeyBinding kb = bindings[bindingIndex];
 
-				for (int buttonIndex = 0; buttonIndex < bindings[bindingIndex].Buttons.Count; buttonIndex++)
+				for (int buttonIndex = 0; buttonIndex < bindings[bindingIndex].MouseButtons.Count; buttonIndex++)
 				{
-					Button button = bindings[bindingIndex].Buttons[buttonIndex];
+					Button button = bindings[bindingIndex].MouseButtons[buttonIndex];
 
 					if (button == e.Button)
 					{
-						kb.JustPressed = true;
+						if (!kb.IsDown)
+						{
+							kb.JustPressed = true;
+							kb.IsDown = true;
+						}
+					}
+				}
+
+				bindings[bindingIndex] = kb;
+			}
+		}
+
+		private static void MouseReleased(object sender, MouseButtonEventArgs e)
+		{
+			for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
+			{
+				KeyBinding kb = bindings[bindingIndex];
+
+				for (int buttonIndex = 0; buttonIndex < bindings[bindingIndex].MouseButtons.Count; buttonIndex++)
+				{
+					Button button = bindings[bindingIndex].MouseButtons[buttonIndex];
+
+					if (button != e.Button)
+					{
+						if (kb.IsDown)
+						{
+							kb.JustPressed = false;
+							kb.IsDown = false;
+						}
+					}
+				}
+
+				bindings[bindingIndex] = kb;
+			}
+		}
+
+		private static void GamePadButtonPressed(object sender, JoystickButtonEventArgs e)
+		{
+			for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
+			{
+				KeyBinding kb = bindings[bindingIndex];
+
+				for (int buttonIndex = 0; buttonIndex < bindings[bindingIndex].Keys.Count; buttonIndex++)
+				{
+					uint button = bindings[bindingIndex].GamePadButtons[buttonIndex];
+
+					if (button == e.Button)
+					{
+						if (!kb.IsDown)
+						{
+							kb.IsDown = true;
+							kb.JustPressed = true;
+						}
+					}
+				}
+
+				bindings[bindingIndex] = kb;
+			}
+		}
+
+		private static void GamePadButtonReleased(object sender, JoystickButtonEventArgs e)
+		{
+			for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
+			{
+				KeyBinding kb = bindings[bindingIndex];
+
+				for (int buttonIndex = 0; buttonIndex < bindings[bindingIndex].Keys.Count; buttonIndex++)
+				{
+					uint button = bindings[bindingIndex].GamePadButtons[buttonIndex];
+
+					if (button == e.Button)
+					{
+						if (kb.IsDown)
+						{
+							kb.IsDown = false;
+							kb.JustPressed = false;
+						}
 					}
 				}
 

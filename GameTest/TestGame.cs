@@ -1,10 +1,16 @@
 ﻿using Box2DNet.Collision;
 using Box2DNet.Common;
+
 using ECSEngine;
 using ECSEngine.Components;
+using ECSEngine.Input;
 using ECSEngine.SFML.Graphics;
 using ECSEngine.Systems;
+using static ECSEngine.SFML.Window.Keyboard;
+using static ECSEngine.SFML.Window.Mouse;
+
 using System.Collections.Generic;
+using System;
 
 namespace GameTest
 {
@@ -36,7 +42,36 @@ namespace GameTest
 				new EntityComponentIdentifier("Airship2", new RigidBody(new Vec2(-100, -100), PhysicsManager.World, 1, shipShape)),
 			});
 
+			InputManager.AddBinding(new KeyBinding("Up", 
+				new List<Key>() { Key.W, Key.Up }, 
+				new List<Button>() { Button.Left }, 
+				new List<uint>() { 3 })
+			);
+
+			InputManager.AddBinding(new KeyBinding("Down",
+				new List<Key>() { Key.S, Key.Down },
+				new List<Button>() { Button.Right },
+				new List<uint>() { 0 })
+			);
+
 			base.Initialize();
+		}
+
+		protected override void Update(GameTime gameTime)
+		{
+			if (InputManager.GetBinding("Up").JustPressed)
+			{
+				RigidBody rb = (RigidBody)ECSManager.GetEntityComponent("Airship", typeof(RigidBody));
+				rb.body.SetLinearVelocity(new System.Numerics.Vector2(-100, -100));
+				ECSManager.SetEntityComponent("Airship", rb);
+			}else if (InputManager.GetBinding("Down").JustPressed)
+			{
+				RigidBody rb = (RigidBody)ECSManager.GetEntityComponent("Airship", typeof(RigidBody));
+				rb.body.SetLinearVelocity(new System.Numerics.Vector2(100, 100));
+				ECSManager.SetEntityComponent("Airship", rb);
+			}
+
+			base.Update(gameTime);
 		}
 	}
 }
