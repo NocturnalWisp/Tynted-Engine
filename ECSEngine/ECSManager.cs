@@ -10,7 +10,7 @@ namespace ECSEngine
 {
 	public class ECSManager
 	{
-		static List<EntityData> entities = new List<EntityData>();
+		internal static List<EntityData> entities = new List<EntityData>();
 		static int nextEntity = 0;
 
 		static List<System> systems = new List<System>();
@@ -81,10 +81,14 @@ namespace ECSEngine
 					//Check if has require components attribute
 					foreach (object attribute in systemType.GetCustomAttributes(false))
 					{
-						if (attribute.GetType() == typeof(RequireComponents))
+						if (attribute.GetType() == typeof(GetComponents))
 						{
-							system.types = ((RequireComponents)attribute).Types;
+							system.types = ((GetComponents)attribute).Types;
 							attributeUsed = true;
+						}else if (attribute.GetType() == typeof(RequireTag))
+						{
+							system.tagSpecific = true;
+							system.tag = ((RequireTag)attribute).tag;
 						}
 					}
 
@@ -196,11 +200,6 @@ namespace ECSEngine
 			EntityData data = new EntityData(nextEntity, name, tag);
 			entities.Add(data);
 			nextEntity++;
-
-			foreach (System system in systems)
-			{
-				system.AddEntity(data.EntityID);
-			}
 		}
 
 		/// <summary>
@@ -261,7 +260,7 @@ namespace ECSEngine
 
 						foreach (System system in systems)
 						{
-							system.AddEntityComponent(entityID, component);
+							system.AddEntityComponent(entityID, GetEntityComponents(entityID));
 						}
 					}
 				}

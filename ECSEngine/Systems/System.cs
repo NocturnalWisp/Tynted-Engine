@@ -19,18 +19,13 @@ namespace ECSEngine
 		internal Type[] types;
 		private List<Entity> entities = new List<Entity>();
 
+		//If the attribute RequireTag is used, then use these.
+		internal bool tagSpecific = false;
+		internal string tag = "Default";
+
 		public System() { }
 
-		public virtual void Initialize()
-		{
-			foreach(Entity entity in entities)
-			{
-				for (int i = 0; i < entity.components.Count; i++)
-				{
-					ECSManager.SetEntityComponent(entity.entityID, entity.components[i]);
-				}
-			}
-		}
+		public virtual void Initialize() { }
 
 		/// <summary>
 		/// Use this to create all the events that a system will utilize.
@@ -53,29 +48,32 @@ namespace ECSEngine
 			}
 		}
 
-		public virtual void Draw(RenderWindow window)
-		{
-			foreach (Entity entity in entities)
-			{
-				for (int i = 0; i < entity.components.Count; i++)
-				{
-					ECSManager.SetEntityComponent(entity.entityID, entity.components[i]);
-				}
-			}
-		}
+		public virtual void Draw(RenderWindow window) { }
 
+		//TODO: Make sure tag is checked if required.
 		/// <summary>
 		/// For the engine to add new entity components.
 		/// </summary>
-		internal void AddEntityComponent(int entityID, IComponent component)
+		internal void AddEntityComponent(int entityID, List<IComponent> components)
 		{
-			//Make sure type is allowed
-			if (types.Contains(component.GetType()))
+			//Make sure all types are matched
+			if (types.All(T => components.Exists(x => T == x.GetType())))
 			{
-				//Make sure entity exists and component does not
-				if (entities.Exists(o => o.entityID == entityID && !o.components.Exists(x => x.GetType() == component.GetType())))
+				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID && o.Tag == tag);
+
+				//check for tag if that attribute has been added.
+				if ((tagSpecific && !data.Equals(default)) || !tagSpecific)
 				{
-					entities[entities.IndexOf(entities.Find(o => o.entityID == entityID))].components.Add(component);
+					//Make sure entity exists and components are empty
+					if (entities.Exists(o => o.entityID == entityID && o.components.Count <= 0))
+					{
+						entities[entities.IndexOf(entities.Find(o => o.entityID == entityID))].components = components.FindAll(o => types.Contains(o.GetType()));
+					}
+					else
+					{
+						AddEntity(entityID);
+						entities[entities.IndexOf(entities.Find(o => o.entityID == entityID))].components = components.FindAll(o => types.Contains(o.GetType()));
+					}
 				}
 			}
 		}
@@ -96,7 +94,6 @@ namespace ECSEngine
 			}
 		}
 		
-		//TODO: Make sure entity contains all types.
 		/// <summary>
 		/// For the engine to remove entity components.
 		/// </summary>
@@ -113,7 +110,7 @@ namespace ECSEngine
 		/// <summary>
 		/// For the engine to add a new entity.
 		/// </summary>
-		internal void AddEntity(int entityID)
+		private void AddEntity(int entityID)
 		{
 			//Make sure entity doesn't exist
 			if (!entities.Exists(o => o.entityID == entityID))

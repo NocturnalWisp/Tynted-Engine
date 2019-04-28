@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ECSEngine.Systems
 {
-	[RequireComponents(typeof(SpriteRenderee), typeof(Components.Transform))]
+	[GetComponents(typeof(SpriteRenderee), typeof(Components.Transform))]
 	class SpriteRenderer : System
 	{
 		public override void Draw(RenderWindow window)

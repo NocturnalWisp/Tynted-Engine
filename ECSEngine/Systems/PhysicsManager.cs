@@ -12,7 +12,7 @@ using System;
 
 namespace ECSEngine.Systems
 {
-	[RequireComponents(typeof(RigidBody), typeof(Transform))]
+	[GetComponents(typeof(RigidBody), typeof(Transform))]
 	public class PhysicsManager : System
 	{
 		private static World world = new World(new AABB(new Vector2(0, 0), new Vector2(1024, 768)), new Vec2(0, 0), false);

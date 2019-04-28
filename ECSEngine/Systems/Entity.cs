@@ -44,7 +44,11 @@ namespace ECSEngine
 		/// <returns>The component if found, otherwise null.</returns>
 		public T GetComponent<T>() where T : IComponent
 		{
-			return (T)GetComponent(typeof(T));
+			IComponent component = GetComponent(typeof(T));
+			if (component != null)
+				return (T)component;
+			else
+				return default;
 		}
 
 		public void SetComponent(IComponent component)
