@@ -1,14 +1,10 @@
-﻿using System;
+﻿using ECSEngine.Components;
+using ECSEngine.Events;
+using ECSEngine.SFML.Graphics;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ECSEngine;
-using ECSEngine.Events;
-using ECSEngine.Systems;
-using ECSEngine.SFML.Graphics;
-using ECSEngine.Components;
 
 namespace ECSEngine
 {
@@ -20,7 +16,7 @@ namespace ECSEngine
 		static List<System> systems = new List<System>();
 
 		static List<Component> components = new List<Component>();
-        
+
 		static Dictionary<string, EngineEvent> events = new Dictionary<string, EngineEvent>();
 		static Dictionary<string, EngineEvent<object>> events1 = new Dictionary<string, EngineEvent<object>>();
 		static Dictionary<string, EngineEvent<object, object>> events2 = new Dictionary<string, EngineEvent<object, object>>();
@@ -74,14 +70,31 @@ namespace ECSEngine
 		/// <param name="systemType">The type of system to add.</param>
 		public static void AddSystem(Type systemType)
 		{
-            if (typeof(System).IsAssignableFrom(systemType))
-            {
-                if (systems.Find(o => o.GetType() == systemType) == null)
-                {
-                    systems.Add((System)Activator.CreateInstance(systemType));
-                    Console.WriteLine("Added system: " + systemType);
-                }
-            }
+			if (typeof(System).IsAssignableFrom(systemType))
+			{
+				if (systems.Find(o => o.GetType() == systemType) == null)
+				{
+					bool attributeUsed = false;
+
+					System system = (System)Activator.CreateInstance(systemType);
+
+					//Check if has require components attribute
+					foreach (object attribute in systemType.GetCustomAttributes(false))
+					{
+						if (attribute.GetType() == typeof(RequireComponents))
+						{
+							system.types = ((RequireComponents)attribute).Types;
+							attributeUsed = true;
+						}
+					}
+
+					if (!attributeUsed) system.types = new Type[0];
+
+					systems.Add(system);
+
+					Console.WriteLine("Added system: " + systemType);
+				}
+			}
 		}
 
 		/// <summary>
@@ -102,7 +115,7 @@ namespace ECSEngine
 		{
 			return components.ToList();
 		}
-		
+
 		/// <summary>
 		/// Adds a component to the type of components list.
 		/// </summary>
@@ -161,7 +174,7 @@ namespace ECSEngine
 		/// <param name="componentType">The component type to search for.</param>
 		/// <returns>List of objects found.</returns>
 		public static List<EntityComponent> GetComponentEntityList(Type componentType)
-        {
+		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
 				if (components.Find(o => o.componentType == componentType) != null)
@@ -180,8 +193,32 @@ namespace ECSEngine
 		/// <param name="tag">Optional tag of the entity.</param>
 		public static void CreateEntity(string name, string tag = "Default")
 		{
-			entities.Add(new EntityData(nextEntity, name, tag));
+			EntityData data = new EntityData(nextEntity, name, tag);
+			entities.Add(data);
 			nextEntity++;
+
+			foreach (System system in systems)
+			{
+				system.AddEntity(data.EntityID);
+			}
+		}
+
+		/// <summary>
+		/// Removes an entity completely from existance.
+		/// </summary>
+		/// <param name="name">The name of the entity.</param>
+		public static void DeleteEntity(string name)
+		{
+			foreach (System system in systems)
+			{
+				system.RemoveEntity(entities.Find(o => o.Name == name).EntityID);
+			}
+
+			//Remove all components from the entity
+			RemoveAllEntityComponents(name);
+
+			//Remove the entity;
+			entities.Remove(entities.Find(o => o.Name == name));
 		}
 
 		/// <summary>
@@ -199,11 +236,7 @@ namespace ECSEngine
 				//Make sure entity exists
 				if (!eData.Equals(default(EntityData)))
 				{
-					//make sure entity does not already exist
-					if (!GetComponentEntityList(component.GetType()).Exists(o => o.entityID == eData.EntityID))
-					{
-						components.Find(o => o.componentType == component.GetType()).entityComponents.Add(new EntityComponent(eData.EntityID, component));
-					}
+					AddEntityComponent(eData.EntityID, component);
 				}
 			}
 		}
@@ -225,11 +258,16 @@ namespace ECSEngine
 					if (!GetComponentEntityList(component.GetType()).Exists(o => o.entityID == entityID))
 					{
 						components.Find(o => o.componentType == component.GetType()).entityComponents.Add(new EntityComponent(entityID, component));
+
+						foreach (System system in systems)
+						{
+							system.AddEntityComponent(entityID, component);
+						}
 					}
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Adds a list of entity components in batch.
 		/// </summary>
@@ -241,7 +279,7 @@ namespace ECSEngine
 				AddEntityComponent(entityComponent.name, entityComponent.component);
 			}
 		}
-		
+
 		/// <summary>
 		/// Adds a list of entity components in batch.
 		/// </summary>
@@ -250,7 +288,7 @@ namespace ECSEngine
 		{
 			foreach (EntityComponent entityComponent in entityComponents)
 			{
-                AddEntityComponent(entityComponent.entityID, entityComponent.component);
+				AddEntityComponent(entityComponent.entityID, entityComponent.component);
 			}
 		}
 
@@ -261,20 +299,20 @@ namespace ECSEngine
 		/// <param name="componentType">The type of component to remove.</param>
 		public static void RemoveEntityComponent(string entityName, Type componentType)
 		{
-            if (typeof(IComponent).IsAssignableFrom(componentType))
-            {
-                //make sure component exists
-                if (components.Find(o => o.componentType == componentType) != null)
-                {
-                    EntityData eData = entities.Find(o => o.Name == entityName);
+			if (typeof(IComponent).IsAssignableFrom(componentType))
+			{
+				//make sure component exists
+				if (components.Find(o => o.componentType == componentType) != null)
+				{
+					EntityData eData = entities.Find(o => o.Name == entityName);
 
-                    //Make sure data exists
-                    if (!eData.Equals(default(EntityData)))
-                    {
+					//Make sure data exists
+					if (!eData.Equals(default(EntityData)))
+					{
 						RemoveEntityComponent(eData.EntityID, componentType);
-                    }
-                }
-            }
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -284,10 +322,10 @@ namespace ECSEngine
 		/// <param name="componentType">The type of component to remove.</param>
 		internal static void RemoveEntityComponent(int entityID, Type componentType)
 		{
-            if (typeof(IComponent).IsAssignableFrom(componentType))
-            {
-                //make sure it has component
-                if (components.Find(o => o.componentType == componentType) != null)
+			if (typeof(IComponent).IsAssignableFrom(componentType))
+			{
+				//make sure it has component
+				if (components.Find(o => o.componentType == componentType) != null)
 				{
 					//Make sure entity exists
 					if (!entities.Find(o => o.EntityID == entityID).Equals(default(EntityData)))
@@ -297,10 +335,15 @@ namespace ECSEngine
 						{
 							components.Find(o => o.componentType == componentType).entityComponents
 								.RemoveAll(o => o.entityID == entityID && o.component.GetType() == componentType);
+
+							foreach (System system in systems)
+							{
+								system.RemoveEntityComponent(entityID, componentType);
+							}
 						}
 					}
-                }
-            }
+				}
+			}
 		}
 
 		/// <summary>
@@ -311,20 +354,20 @@ namespace ECSEngine
 		/// <returns>The component if found, otherwise null.</returns>
 		public static IComponent GetEntityComponent(string entityName, Type componentType)
 		{
-            if (typeof(IComponent).IsAssignableFrom(componentType))
-            {
-                //make sure component exists
-                if (components.Find(o => o.componentType == componentType) != null)
-                {
-                    EntityData eData = entities.Find(o => o.Name == entityName);
+			if (typeof(IComponent).IsAssignableFrom(componentType))
+			{
+				//make sure component exists
+				if (components.Find(o => o.componentType == componentType) != null)
+				{
+					EntityData eData = entities.Find(o => o.Name == entityName);
 
-                    //make sure entity exists
-                    if (!eData.Equals(default(EntityData)))
-                    {
-                        return components.Find(o => o.componentType == componentType).entityComponents.Find(o => o.entityID == eData.EntityID).component;
-                    }
-                }
-            }
+					//make sure entity exists
+					if (!eData.Equals(default(EntityData)))
+					{
+						return components.Find(o => o.componentType == componentType).entityComponents.Find(o => o.entityID == eData.EntityID).component;
+					}
+				}
+			}
 
 			return null;
 		}
@@ -380,22 +423,27 @@ namespace ECSEngine
 		/// <param name="component">The component to become.</param>
 		internal static void SetEntityComponent(int entityID, IComponent component)
 		{
-            //make sure component exists
-            if (components.Find(o => o.componentType == component.GetType()) != null)
+			//make sure component exists
+			if (components.Find(o => o.componentType == component.GetType()) != null)
 			{
 				//Make sure entity exists
 				if (!entities.Find(o => o.EntityID == entityID).Equals(default(EntityData)))
 				{
 					EntityComponent ec = components.Find(o => o.componentType == component.GetType()).entityComponents.Find(o => o.entityID == entityID);
 
-					if (ec != default(EntityComponent))
+					if (ec != default)
 					{
 						ec.component = component;
 						components.Find(o => o.componentType == component.GetType()).entityComponents
 							[components.Find(o => o.componentType == component.GetType()).entityComponents.FindIndex(o => o.entityID == entityID)] = ec;
+
+						foreach (System system in systems)
+						{
+							system.SetEntityComponent(entityID, component);
+						}
 					}
 				}
-            }
+			}
 		}
 
 		/// <summary>
@@ -413,7 +461,7 @@ namespace ECSEngine
 					//make sure entity exists
 					if (!eData.Equals(default(EntityData)))
 					{
-                        RemoveEntityComponent(components[i].entityComponents[j].entityID, components[i].entityComponents[j].component.GetType());
+						RemoveEntityComponent(components[i].entityComponents[j].entityID, components[i].entityComponents[j].component.GetType());
 					}
 				}
 			}
@@ -430,9 +478,9 @@ namespace ECSEngine
 				for (int j = components[i].entityComponents.Count - 1; j >= 0; j--)
 				{
 					if (entityID == components[i].entityComponents[j].entityID)
-                    {
-                        RemoveEntityComponent(components[i].entityComponents[j].entityID, components[i].entityComponents[j].component.GetType());
-                    }
+					{
+						RemoveEntityComponent(components[i].entityComponents[j].entityID, components[i].entityComponents[j].component.GetType());
+					}
 				}
 			}
 		}

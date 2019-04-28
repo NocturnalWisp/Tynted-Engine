@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Box2DNet.Collision;
+using Box2DNet.Common;
 using ECSEngine;
 using ECSEngine.Components;
 using ECSEngine.SFML.Graphics;
-using ECSEngine.SFML.System;
-
 using ECSEngine.Systems;
-using ECSEngine.Input;
-using static ECSEngine.SFML.Window.Keyboard;
-using static ECSEngine.SFML.Window.Mouse;
-
-using Box2DNet.Collision;
-using Box2DNet.Common;
+using System.Collections.Generic;
 
 namespace GameTest
 {
@@ -46,7 +35,7 @@ namespace GameTest
 				new EntityComponentIdentifier("Airship2", new ECSEngine.Components.Transform(new Vec2(200, 200))),
 				new EntityComponentIdentifier("Airship2", new RigidBody(new Vec2(-100, -100), PhysicsManager.World, 1, shipShape)),
 			});
-			
+
 			base.Initialize();
 		}
 	}

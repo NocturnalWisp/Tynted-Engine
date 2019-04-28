@@ -1,53 +1,33 @@
-﻿using System;
+﻿using ECSEngine.Components;
+using ECSEngine.SFML.Graphics;
+using Transform = ECSEngine.Components.Transform;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using ECSEngine;
-using ECSEngine.Components;
-using ECSEngine.Events;
-using ECSEngine.SFML.Graphics;
-using ECSEngine.SFML.System;
-
-using Box2DNet.Common;
 
 namespace ECSEngine.Systems
 {
+	[RequireComponents(typeof(SpriteRenderee), typeof(Components.Transform))]
 	class SpriteRenderer : System
 	{
 		public override void Draw(RenderWindow window)
 		{
-			var spriteRenderees = ECSManager.GetComponentEntityActiveList(typeof(SpriteRenderee));
-			var transforms = ECSManager.GetComponentEntityActiveList(typeof(Components.Transform));
+			var allTypes = GetEntities();
 
-			for (int entityID = 0; entityID < spriteRenderees.Count(); entityID++)
+			foreach (Entity entity in allTypes)
 			{
-				if (transforms.Exists(o => o.entityID == entityID))
-				{
-					EntityComponent rComponent = spriteRenderees.Find(o => o.entityID == entityID);
-					EntityComponent tComponent = transforms.Find(o => o.entityID == entityID);
-					SpriteRenderee sRenderee = (SpriteRenderee)rComponent.component;
-					Components.Transform transform = (Components.Transform)tComponent.component;
-					window.Draw(sRenderee.sprite);
-					sRenderee.sprite.Position = transform.position;
-					sRenderee.sprite.Rotation = transform.rotation;
-					sRenderee.sprite.Scale = transform.scale;
+				SpriteRenderee sr = entity.GetComponent<SpriteRenderee>();
+				Transform t = entity.GetComponent<Transform>();
 
-					rComponent.component = sRenderee;
-					spriteRenderees[spriteRenderees.IndexOf(spriteRenderees.Find(o => o.entityID == entityID))] = rComponent;
-				}
-			}
+				//Set sprite values based on transform
+				sr.sprite.Position = t.position;
+				sr.sprite.Rotation = t.rotation;
+				sr.sprite.Scale = t.scale;
 
-			foreach(EntityComponent sr in spriteRenderees)
-			{
-				ECSManager.SetEntityComponent(sr.entityID, sr.component);
-			}
+				window.Draw(sr.sprite);
 
-			foreach (EntityComponent t in transforms)
-			{
-				ECSManager.SetEntityComponent(t.entityID, t.component);
+				entity.SetComponent(sr);
 			}
 
 			base.Draw(window);

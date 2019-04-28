@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Reflection;
-
-using ECSEngine;
+﻿using ECSEngine.Input;
 using ECSEngine.SFML.Graphics;
 using ECSEngine.SFML.System;
 using ECSEngine.SFML.Window;
-using ECSEngine.Input;
-using ECSEngine.Components;
-using ECSEngine.Systems;
+
+using System;
+using System.Reflection;
 
 namespace ECSEngine
 {
@@ -40,11 +33,11 @@ namespace ECSEngine
 				//Grabs the components from the Assembly
 				if (typeof(IComponent).IsAssignableFrom(type) && type != typeof(IComponent))
 				{
-                    ECSManager.AddComponent(type);
+					ECSManager.AddComponent(type);
 				}
 				//Grabs the Systems from the Assembly
 				else if (type.IsSubclassOf(typeof(System)))
-                {
+				{
 					ECSManager.AddSystem(type);
 				}
 			}

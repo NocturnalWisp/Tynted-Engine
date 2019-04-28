@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Box2DNet.Collision;
+using Box2DNet.Common;
+using Box2DNet.Dynamics;
 
 using ECSEngine.Components;
 using ECSEngine.Events;
+using Transform = ECSEngine.Components.Transform;
 
-using Box2DNet.Dynamics;
-using Box2DNet.Common;
-using Box2DNet.Collision;
+using System.Collections.Generic;
+using System.Numerics;
+using System;
 
 namespace ECSEngine.Systems
 {
+	[RequireComponents(typeof(RigidBody), typeof(Transform))]
 	public class PhysicsManager : System
 	{
 		private static World world = new World(new AABB(new Vector2(0, 0), new Vector2(1024, 768)), new Vec2(0, 0), false);
 		public static World World { get => world; }
-
-		List<RigidBody> rigidbody = new List<RigidBody>();
 
 		EngineEvent<object, object> collisionEvent;
 
@@ -32,30 +29,11 @@ namespace ECSEngine.Systems
 
 		public override void Initialize()
 		{
-			var rigidBodies = ECSManager.GetComponentEntityActiveList(typeof(RigidBody));
-			var transforms = ECSManager.GetComponentEntityActiveList(typeof(Components.Transform));
+			var allTypes = GetEntities();
 
-			for (int i = 0; i < rigidBodies.Count; i++)
+			foreach (Entity entity in allTypes)
 			{
-				EntityComponent rbComponent = rigidBodies[i];
-				RigidBody rb = (RigidBody)rbComponent.component;
-
-				EntityComponent tComponent = transforms.Find(o => o.entityID == rigidBodies[i].entityID);
-				Components.Transform t = (Components.Transform)tComponent.component;
-
-				rb.body.SetPosition(t.position);
-
-				rigidBodies[rigidBodies.IndexOf(rbComponent)] = rbComponent;
-			}
-
-			foreach (EntityComponent rb in rigidBodies)
-			{
-				ECSManager.SetEntityComponent(rb.entityID, rb.component);
-			}
-
-			foreach (EntityComponent t in transforms)
-			{
-				ECSManager.SetEntityComponent(t.entityID, t.component);
+				entity.GetComponent<RigidBody>().body.SetPosition(entity.GetComponent<Transform>().position);
 			}
 
 			base.Initialize();
@@ -63,35 +41,15 @@ namespace ECSEngine.Systems
 
 		public override void Update(GameTime gameTime)
 		{
+			var allTypes = GetEntities();
+
 			world.Step(gameTime.elapsedTime.AsSeconds(), 8, 3);
 
-			var rigidBodies = ECSManager.GetComponentEntityActiveList(typeof(RigidBody));
-			var transforms = ECSManager.GetComponentEntityActiveList(typeof(Components.Transform));
-
-			foreach (EntityComponent rigidBody in rigidBodies)
+			foreach (Entity entity in allTypes)
 			{
-				RigidBody rb = (RigidBody)rigidBody.component;
-
-				if (rb.mass > 0)
-				{
-					EntityComponent tComponent = transforms.Find(o => o.entityID == rigidBody.entityID);
-					Components.Transform t = (Components.Transform)tComponent.component;
-
-					t.position = rb.body.GetPosition();
-					tComponent.component = t;
-
-					transforms[transforms.IndexOf(transforms.Find(o => o.entityID == rigidBody.entityID))] = tComponent;
-				}
-			}
-
-			foreach (EntityComponent rb in rigidBodies)
-			{
-				ECSManager.SetEntityComponent(rb.entityID, rb.component);
-			}
-
-			foreach (EntityComponent t in transforms)
-			{
-				ECSManager.SetEntityComponent(t.entityID, t.component);
+				Transform transform = entity.GetComponent<Transform>();
+				transform.position = entity.GetComponent<RigidBody>().body.GetPosition();
+				entity.SetComponent(transform);
 			}
 
 			base.Update(gameTime);
