@@ -13,8 +13,10 @@ namespace ECSEngine
 {
 	public class System
 	{
+		//These both allow for the system to control a list of entities 
+		//that can be dynamically altered based on the ECSManager list, 
+		//and when things are changed within the system.
 		internal Type[] types;
-
 		private List<Entity> entities = new List<Entity>();
 
 		public System() { }
