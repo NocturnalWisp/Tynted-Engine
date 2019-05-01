@@ -8,6 +8,7 @@ using ECSEngine.SFML.Graphics;
 using ECSEngine.Systems;
 using static ECSEngine.SFML.Window.Keyboard;
 using static ECSEngine.SFML.Window.Mouse;
+using Transform = ECSEngine.Components.Transform;
 
 using System.Collections.Generic;
 using System;
@@ -34,11 +35,11 @@ namespace GameTest
 			ECSManager.RegisterEntityComponents(new List<EntityComponentIdentifier>()
 			{
 				new EntityComponentIdentifier("Airship", new SpriteRenderee(sprite)),
-				new EntityComponentIdentifier("Airship", new ECSEngine.Components.Transform(new Vec2(0, 0))),
+				new EntityComponentIdentifier("Airship", new Transform(new Vec2(0, 0))),
 				new EntityComponentIdentifier("Airship", new RigidBody(new Vec2(100, 100), PhysicsManager.World, 1, shipShape)),
 
 				new EntityComponentIdentifier("Airship2", new SpriteRenderee(sprite)),
-				new EntityComponentIdentifier("Airship2", new ECSEngine.Components.Transform(new Vec2(200, 200))),
+				new EntityComponentIdentifier("Airship2", new Transform(new Vec2(200, 200))),
 				new EntityComponentIdentifier("Airship2", new RigidBody(new Vec2(-100, -100), PhysicsManager.World, 1, shipShape)),
 			});
 

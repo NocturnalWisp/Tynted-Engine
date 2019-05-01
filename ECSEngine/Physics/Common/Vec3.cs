@@ -100,6 +100,11 @@ namespace Box2DNet.Common
 			return new Vec3(v.X * s, v.Y * s, v.Z * s);
 		}
 
+		public static implicit operator Vec2(Vec3 vector)
+		{
+			return new Vec2(vector.X, vector.Y);
+		}
+
 		public float X, Y, Z;
 	}
 }

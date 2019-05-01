@@ -33,7 +33,7 @@ namespace ECSEngine.Systems
 
 			foreach (Entity entity in allTypes)
 			{
-				entity.GetComponent<RigidBody>().body.SetPosition(entity.GetComponent<Transform>().position);
+				entity.GetComponent<RigidBody>().body.SetPosition(entity.GetComponent<Transform>().GetWorldPosition());
 			}
 
 			base.Initialize();
@@ -48,7 +48,7 @@ namespace ECSEngine.Systems
 			foreach (Entity entity in allTypes)
 			{
 				Transform transform = entity.GetComponent<Transform>();
-				transform.position = entity.GetComponent<RigidBody>().body.GetPosition();
+				transform.LocalPosition = entity.GetComponent<RigidBody>().body.GetPosition();
 				entity.SetComponent(transform);
 			}
 
