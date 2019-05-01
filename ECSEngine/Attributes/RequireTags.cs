@@ -10,13 +10,13 @@ namespace ECSEngine
 	/// Applied to system to only place entities with a certain tag in the GetEntities() list.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
-	class RequireTag : Attribute
+	class RequireTags : Attribute
 	{
-		public string tag;
+		public string[] tag;
 
-		public RequireTag(string tag)
+		public RequireTags(params string[] tags)
 		{
-			this.tag = tag;
+			this.tag = tags;
 		}
 	}
 }

@@ -85,10 +85,16 @@ namespace ECSEngine
 						{
 							system.types = ((GetComponents)attribute).Types;
 							attributeUsed = true;
-						}else if (attribute.GetType() == typeof(RequireTag))
+						}
+
+						if (attribute.GetType() == typeof(RequireTags))
 						{
 							system.tagSpecific = true;
-							system.tag = ((RequireTag)attribute).tag;
+							system.tags = ((RequireTags)attribute).tag;
+						}
+						else
+						{
+							system.tags = new string[0];
 						}
 					}
 

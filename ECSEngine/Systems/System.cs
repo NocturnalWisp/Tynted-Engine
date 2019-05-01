@@ -21,7 +21,7 @@ namespace ECSEngine
 
 		//If the attribute RequireTag is used, then use these.
 		internal bool tagSpecific = false;
-		internal string tag = "Default";
+		internal string[] tags;
 
 		public System() { }
 
@@ -59,7 +59,7 @@ namespace ECSEngine
 			//Make sure all types are matched
 			if (types.All(T => components.Exists(x => T == x.GetType())))
 			{
-				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID && o.Tag == tag);
+				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID && tags.Contains(o.Tag));
 
 				//check for tag if that attribute has been added.
 				if ((tagSpecific && !data.Equals(default)) || !tagSpecific)

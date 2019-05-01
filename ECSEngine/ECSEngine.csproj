@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\GetComponents.cs" />
-    <Compile Include="Attributes\RequireTag.cs" />
+    <Compile Include="Attributes\RequireTags.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\EntityComponentIdentifier.cs" />
     <Compile Include="Components\RigidBody.cs" />
