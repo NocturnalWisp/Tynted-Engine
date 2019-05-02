@@ -53,7 +53,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ECSEngine\TyntedEngine.csproj">
+    <ProjectReference Include="..\TyntedEngine\TyntedEngine.csproj">
       <Project>{e076343e-4481-47aa-be7c-881e83c559b9}</Project>
       <Name>TyntedEngine</Name>
     </ProjectReference>
