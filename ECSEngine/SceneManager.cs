@@ -56,6 +56,19 @@ namespace ECSEngine
 			}
 		}
 
+		//TODO: Having the function take in an entity name could 
+		//cause problems if there are multiple entities of the same name.
+		/// <summary>
+		/// Prevents the entity from being destroyed when a new scene is loaded.
+		/// </summary>
+		/// <param name="entityName">The name of the entity.</param>
+		public static void CarryableEntity(string entityName)
+		{
+			EntityData data = ECSManager.entities.Find(o => o.Name == entityName);
+
+			data.SceneName = "";
+		}
+
 		internal static bool SceneExists(string sceneName)
 		{
 			return currentScenes.Exists(o => o.SceneName == sceneName);
