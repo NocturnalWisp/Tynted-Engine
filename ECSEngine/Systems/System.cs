@@ -62,8 +62,6 @@ namespace ECSEngine
 			if (types.All(T => components.Exists(x => T == x.GetType())))
 			{
 				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID);
-
-				Console.WriteLine(((sceneSpecific && scenes.Contains(data.SceneName)) || !sceneSpecific));
 				
 				//check for tag if that attribute has been added.
 				if (((tagSpecific && tags.Contains(data.Tag)) || !tagSpecific) &&

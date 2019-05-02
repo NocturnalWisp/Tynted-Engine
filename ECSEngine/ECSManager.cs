@@ -179,7 +179,7 @@ namespace ECSEngine
 			{
 				if (components.Find(o => o.componentType == componentType) != null)
 				{
-					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => o.component.Enabled).ToList();
+					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => o.component.Enabled && SceneManager.SceneExists(entities.Find(x => x.EntityID == o.entityID).SceneName)).ToList();
 				}
 			}
 
@@ -197,38 +197,7 @@ namespace ECSEngine
 			{
 				if (components.Find(o => o.componentType == componentType) != null)
 				{
-					return components.Find(o => o.componentType == componentType).entityComponents;
-				}
-			}
-
-			return new List<EntityComponent>();
-		}
-
-		public static List<EntityComponent> GetComponentEntityActiveSceneList(Type componentType, string sceneName)
-		{
-			if (typeof(IComponent).IsAssignableFrom(componentType))
-			{
-				if (components.Find(o => o.componentType == componentType) != null)
-				{
-					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => o.component.Enabled).Where(o => entities.Find(x => x.EntityID == o.entityID).SceneName == sceneName).ToList();
-				}
-			}
-
-			return new List<EntityComponent>();
-		}
-
-		/// <summary>
-		/// Gets all of the entity components with a component type.
-		/// </summary>
-		/// <param name="componentType">The component type to search for.</param>
-		/// <returns>List of objects found.</returns>
-		public static List<EntityComponent> GetComponentEntitySceneList(Type componentType, string sceneName)
-		{
-			if (typeof(IComponent).IsAssignableFrom(componentType))
-			{
-				if (components.Find(o => o.componentType == componentType) != null)
-				{
-					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => entities.Find(x => x.EntityID == o.entityID).SceneName == sceneName).ToList();
+					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => SceneManager.SceneExists(entities.Find(x => x.EntityID == o.entityID).SceneName)).ToList();
 				}
 			}
 
