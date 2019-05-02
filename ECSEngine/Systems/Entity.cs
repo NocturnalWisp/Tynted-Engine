@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECSEngine
+namespace Tynted
 {
 	/// <summary>
 	/// This class is utilized specifically for systems.

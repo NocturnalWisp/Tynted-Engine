@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECSEngine.Events
+namespace Tynted.Events
 {
-	public class EngineEvent
+	public class TyntedEvent
 	{
 		List<EngineAction> actions;
 
-		public EngineEvent()
+		public TyntedEvent()
 		{
 			actions = new List<EngineAction>();
 		}
@@ -48,11 +48,11 @@ namespace ECSEngine.Events
 		}
 	}
 
-	public class EngineEvent<T0>
+	public class TyntedEvent<T0>
 	{
 		List<EngineAction<T0>> actions;
 
-		public EngineEvent()
+		public TyntedEvent()
 		{
 			actions = new List<EngineAction<T0>>();
 		}
@@ -90,11 +90,11 @@ namespace ECSEngine.Events
 		}
 	}
 
-	public class EngineEvent<T0, T1>
+	public class TyntedEvent<T0, T1>
 	{
 		List<EngineAction<T0, T1>> actions;
 
-		public EngineEvent()
+		public TyntedEvent()
 		{
 			actions = new List<EngineAction<T0, T1>>();
 		}

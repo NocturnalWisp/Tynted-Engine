@@ -8,7 +8,7 @@ using Box2DNet.Collision;
 using Box2DNet.Common;
 using Box2DNet.Dynamics;
 
-namespace ECSEngine.Components
+namespace Tynted.Components
 {
 	public struct RigidBody : IComponent
 	{

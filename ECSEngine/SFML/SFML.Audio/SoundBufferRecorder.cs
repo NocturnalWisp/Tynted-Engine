@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ECSEngine.SFML.Audio
+namespace Tynted.SFML.Audio
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ECSEngine
+namespace Tynted
 {
 	/// <summary>
 	/// System attribute to have a list of each type of component provided to the System.

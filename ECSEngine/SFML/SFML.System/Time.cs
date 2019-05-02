@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace ECSEngine.SFML.System
+namespace Tynted.SFML.System
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

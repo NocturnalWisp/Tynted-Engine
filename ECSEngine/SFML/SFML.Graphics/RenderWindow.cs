@@ -2,10 +2,10 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using ECSEngine.SFML.System;
-using ECSEngine.SFML.Window;
+using Tynted.SFML.System;
+using Tynted.SFML.Window;
 
-namespace ECSEngine.SFML.Graphics
+namespace Tynted.SFML.Graphics
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

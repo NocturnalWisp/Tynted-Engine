@@ -1,11 +1,11 @@
-﻿using ECSEngine.SFML.Graphics;
+﻿using Tynted.SFML.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECSEngine
+namespace Tynted
 {
 	public static class SceneManager
 	{

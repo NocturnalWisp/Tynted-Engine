@@ -1,10 +1,10 @@
-﻿using ECSEngine.SFML.System;
+﻿using Tynted.SFML.System;
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace ECSEngine.SFML.Window
+namespace Tynted.SFML.Window
 {
     public class Clipboard
     {

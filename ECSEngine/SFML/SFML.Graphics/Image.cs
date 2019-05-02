@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
-using ECSEngine.SFML.System;
+using Tynted.SFML.System;
 
-namespace ECSEngine.SFML.Graphics
+namespace Tynted.SFML.Graphics
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
-using ECSEngine.SFML.System;
+using Tynted.SFML.System;
 
-namespace ECSEngine.SFML.Graphics
+namespace Tynted.SFML.Graphics
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

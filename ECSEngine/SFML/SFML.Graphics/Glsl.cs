@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
-using ECSEngine.SFML.System;
+using Tynted.SFML.System;
 
-namespace ECSEngine.SFML.Graphics.Glsl
+namespace Tynted.SFML.Graphics.Glsl
 {
     #region 2D Vectors
     ////////////////////////////////////////////////////////////

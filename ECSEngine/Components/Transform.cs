@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using Box2DNet.Common;
 
-using ECSEngine.Util;
+using Tynted.Util;
 using Math = System.Math;
 
-namespace ECSEngine.Components
+namespace Tynted.Components
 {
 	public class Transform : IComponent
 	{

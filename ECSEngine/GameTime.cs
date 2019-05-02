@@ -1,5 +1,5 @@
-﻿using ECSEngine;
-using ECSEngine.SFML.System;
+﻿using Tynted;
+using Tynted.SFML.System;
 
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECSEngine
+namespace Tynted
 {
 	public struct GameTime
 	{

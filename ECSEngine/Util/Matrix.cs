@@ -8,7 +8,7 @@ using System.Reflection;
 using Box2DNet.Common;
 using Math = System.Math;
 
-namespace ECSEngine.Util
+namespace Tynted.Util
 {
     public struct Matrix
     {

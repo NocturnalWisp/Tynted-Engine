@@ -1,12 +1,12 @@
-﻿using ECSEngine.Components;
-using ECSEngine.SFML.Graphics;
-using Transform = ECSEngine.Components.Transform;
+﻿using Tynted.Components;
+using Tynted.SFML.Graphics;
+using Transform = Tynted.Components.Transform;
 
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ECSEngine.Systems
+namespace Tynted.Systems
 {
 	[GetComponents(typeof(SpriteRenderee), typeof(Components.Transform))]
 	class SpriteRenderer : System

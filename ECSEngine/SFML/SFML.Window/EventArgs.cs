@@ -1,6 +1,6 @@
 using System;
 
-namespace ECSEngine.SFML.Window
+namespace Tynted.SFML.Window
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

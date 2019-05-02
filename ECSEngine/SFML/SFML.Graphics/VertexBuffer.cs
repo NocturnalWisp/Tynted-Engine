@@ -1,9 +1,9 @@
-﻿using ECSEngine.SFML.System;
+﻿using Tynted.SFML.System;
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace ECSEngine.SFML.Graphics
+namespace Tynted.SFML.Graphics
 {
     public class VertexBuffer : ObjectBase, Drawable
     {

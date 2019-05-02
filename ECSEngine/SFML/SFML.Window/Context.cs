@@ -2,9 +2,9 @@ using System;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
-using ECSEngine.SFML.System;
+using Tynted.SFML.System;
 
-namespace ECSEngine.SFML.Window
+namespace Tynted.SFML.Window
 {
     //////////////////////////////////////////////////////////////////
     /// <summary>

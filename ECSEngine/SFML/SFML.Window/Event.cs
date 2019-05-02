@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ECSEngine.SFML.Window
+namespace Tynted.SFML.Window
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

@@ -1,14 +1,14 @@
-﻿using ECSEngine.SFML.Window;
+﻿using Tynted.SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static ECSEngine.SFML.Window.Keyboard;
-using static ECSEngine.SFML.Window.Mouse;
+using static Tynted.SFML.Window.Keyboard;
+using static Tynted.SFML.Window.Mouse;
 
-namespace ECSEngine.Input
+namespace Tynted.Input
 {
 	public static class InputManager
 	{

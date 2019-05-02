@@ -1,4 +1,4 @@
-namespace ECSEngine.SFML.System
+namespace Tynted.SFML.System
 {
     public static class CSFML
     {

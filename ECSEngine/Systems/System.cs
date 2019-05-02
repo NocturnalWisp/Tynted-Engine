@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ECSEngine;
-using ECSEngine.SFML.Graphics;
+using Tynted;
+using Tynted.SFML.Graphics;
 
-namespace ECSEngine
+namespace Tynted
 {
 	public class System
 	{

@@ -19,7 +19,7 @@
 using System; using System.Numerics;
 using System.Collections.Generic;
 using System.Text;
-using ECSEngine.SFML.System;
+using Tynted.SFML.System;
 
 namespace Box2DNet.Common
 {

@@ -1,12 +1,12 @@
-﻿using ECSEngine.Input;
-using ECSEngine.SFML.Graphics;
-using ECSEngine.SFML.System;
-using ECSEngine.SFML.Window;
+﻿using Tynted.Input;
+using Tynted.SFML.Graphics;
+using Tynted.SFML.System;
+using Tynted.SFML.Window;
 
 using System;
 using System.Reflection;
 
-namespace ECSEngine
+namespace Tynted
 {
 	public class Game : IDisposable
 	{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECSEngine.Events
+namespace Tynted.Events
 {
 	public delegate void EngineAction();
 	public delegate void EngineAction<in T0>(T0 arg0);

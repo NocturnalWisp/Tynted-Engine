@@ -1,5 +1,5 @@
-﻿using ECSEngine.SFML;
-using ECSEngine.SFML.System;
+﻿using Tynted.SFML;
+using Tynted.SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECSEngine.SFML.Window
+namespace Tynted.SFML.Window
 {
     public class Cursor : ObjectBase
     {

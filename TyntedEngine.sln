@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECSEngine", "ECSEngine\ECSEngine.csproj", "{E076343E-4481-47AA-BE7C-881E83C559B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TyntedEngine", "ECSEngine\TyntedEngine.csproj", "{E076343E-4481-47AA-BE7C-881E83C559B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameTest", "GameTest\GameTest.csproj", "{82FAB0B5-0667-4D31-875B-4C37675FED9D}"
 EndProject

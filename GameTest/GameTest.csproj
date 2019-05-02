@@ -53,9 +53,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ECSEngine\ECSEngine.csproj">
+    <ProjectReference Include="..\ECSEngine\TyntedEngine.csproj">
       <Project>{e076343e-4481-47aa-be7c-881e83c559b9}</Project>
-      <Name>ECSEngine</Name>
+      <Name>TyntedEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

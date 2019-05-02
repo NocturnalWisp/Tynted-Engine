@@ -1,12 +1,12 @@
-﻿using ECSEngine.Components;
-using ECSEngine.Events;
-using ECSEngine.SFML.Graphics;
+﻿using Tynted.Components;
+using Tynted.Events;
+using Tynted.SFML.Graphics;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ECSEngine
+namespace Tynted
 {
 	public class ECSManager
 	{
@@ -17,9 +17,9 @@ namespace ECSEngine
 
 		static List<Component> components = new List<Component>();
 
-		static Dictionary<string, EngineEvent> events = new Dictionary<string, EngineEvent>();
-		static Dictionary<string, EngineEvent<object>> events1 = new Dictionary<string, EngineEvent<object>>();
-		static Dictionary<string, EngineEvent<object, object>> events2 = new Dictionary<string, EngineEvent<object, object>>();
+		static Dictionary<string, TyntedEvent> events = new Dictionary<string, TyntedEvent>();
+		static Dictionary<string, TyntedEvent<object>> events1 = new Dictionary<string, TyntedEvent<object>>();
+		static Dictionary<string, TyntedEvent<object, object>> events2 = new Dictionary<string, TyntedEvent<object, object>>();
 
 		/// <summary>
 		/// Initializer for each system.
@@ -558,13 +558,13 @@ namespace ECSEngine
 		/// </summary>
 		/// <param name="name">The name identifier of the event.</param>
 		/// <returns>The created event, or null if already created.</returns>
-		public static EngineEvent CreateEvent(string name)
+		public static TyntedEvent CreateEvent(string name)
 		{
-			EngineEvent ev = null;
+			TyntedEvent ev = null;
 
 			if (!events.ContainsKey(name))
 			{
-				ev = new EngineEvent();
+				ev = new TyntedEvent();
 				events[name] = ev;
 			}
 
@@ -576,13 +576,13 @@ namespace ECSEngine
 		/// </summary>
 		/// <param name="name">The name identifier of the event.</param>
 		/// <returns>The created event, or null if already created.</returns>
-		public static EngineEvent<object> CreateEvent1Arg(string name)
+		public static TyntedEvent<object> CreateEvent1Arg(string name)
 		{
-			EngineEvent<object> ev = null;
+			TyntedEvent<object> ev = null;
 
 			if (!events1.ContainsKey(name))
 			{
-				ev = new EngineEvent<object>();
+				ev = new TyntedEvent<object>();
 				events1[name] = ev;
 			}
 
@@ -594,13 +594,13 @@ namespace ECSEngine
 		/// </summary>
 		/// <param name="name">The name identifier of the event.</param>
 		/// <returns>The created event, or null if already created.</returns>
-		public static EngineEvent<object, object> CreateEvent2Arg(string name)
+		public static TyntedEvent<object, object> CreateEvent2Arg(string name)
 		{
-			EngineEvent<object, object> ev = null;
+			TyntedEvent<object, object> ev = null;
 
 			if (!events2.ContainsKey(name))
 			{
-				ev = new EngineEvent<object, object>();
+				ev = new TyntedEvent<object, object>();
 				events2[name] = ev;
 			}
 

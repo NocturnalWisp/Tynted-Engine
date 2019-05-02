@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace ECSEngine.SFML.System
+namespace Tynted.SFML.System
 {
     ////////////////////////////////////////////////////////////
     /// <summary>

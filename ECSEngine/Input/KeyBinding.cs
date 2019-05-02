@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using static ECSEngine.SFML.Window.Mouse;
-using static ECSEngine.SFML.Window.Keyboard;
-using static ECSEngine.SFML.Window.Joystick;
-using ECSEngine.SFML.Window;
+using static Tynted.SFML.Window.Mouse;
+using static Tynted.SFML.Window.Keyboard;
+using static Tynted.SFML.Window.Joystick;
+using Tynted.SFML.Window;
 
-namespace ECSEngine.Input
+namespace Tynted.Input
 {
 	/// <summary>
 	/// Input bindings.

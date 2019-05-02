@@ -1,14 +1,14 @@
 ﻿using Box2DNet.Collision;
 using Box2DNet.Common;
 
-using ECSEngine;
-using ECSEngine.Components;
-using ECSEngine.Input;
-using ECSEngine.SFML.Graphics;
-using ECSEngine.Systems;
-using static ECSEngine.SFML.Window.Keyboard;
-using static ECSEngine.SFML.Window.Mouse;
-using Transform = ECSEngine.Components.Transform;
+using Tynted;
+using Tynted.Components;
+using Tynted.Input;
+using Tynted.SFML.Graphics;
+using Tynted.Systems;
+using static Tynted.SFML.Window.Keyboard;
+using static Tynted.SFML.Window.Mouse;
+using Transform = Tynted.Components.Transform;
 
 using System.Collections.Generic;
 using System;
