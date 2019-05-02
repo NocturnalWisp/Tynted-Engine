@@ -74,7 +74,9 @@ namespace ECSEngine
 			{
 				if (systems.Find(o => o.GetType() == systemType) == null)
 				{
-					bool attributeUsed = false;
+					bool typeAttributeUsed = false;
+					bool tagAttributeUsed = false;
+					bool sceneAttributeUsed = false;
 
 					System system = (System)Activator.CreateInstance(systemType);
 
@@ -84,21 +86,27 @@ namespace ECSEngine
 						if (attribute.GetType() == typeof(GetComponents))
 						{
 							system.types = ((GetComponents)attribute).Types;
-							attributeUsed = true;
+							typeAttributeUsed = true;
 						}
 
 						if (attribute.GetType() == typeof(RequireTags))
 						{
 							system.tagSpecific = true;
 							system.tags = ((RequireTags)attribute).tag;
+							tagAttributeUsed = true;
 						}
-						else
+
+						if (attribute.GetType() == typeof(RequireScenes))
 						{
-							system.tags = new string[0];
+							system.sceneSpecific = true;
+							system.scenes = ((RequireScenes)attribute).scenes;
+							sceneAttributeUsed = true;
 						}
 					}
 
-					if (!attributeUsed) system.types = new Type[0];
+					if (!typeAttributeUsed) system.types = new Type[0];
+					if (!tagAttributeUsed) system.tags = new string[0];
+					if (!sceneAttributeUsed) system.scenes = new string[0];
 
 					systems.Add(system);
 
@@ -196,14 +204,45 @@ namespace ECSEngine
 			return new List<EntityComponent>();
 		}
 
+		public static List<EntityComponent> GetComponentEntityActiveSceneList(Type componentType, string sceneName)
+		{
+			if (typeof(IComponent).IsAssignableFrom(componentType))
+			{
+				if (components.Find(o => o.componentType == componentType) != null)
+				{
+					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => o.component.Enabled).Where(o => entities.Find(x => x.EntityID == o.entityID).SceneName == sceneName).ToList();
+				}
+			}
+
+			return new List<EntityComponent>();
+		}
+
+		/// <summary>
+		/// Gets all of the entity components with a component type.
+		/// </summary>
+		/// <param name="componentType">The component type to search for.</param>
+		/// <returns>List of objects found.</returns>
+		public static List<EntityComponent> GetComponentEntitySceneList(Type componentType, string sceneName)
+		{
+			if (typeof(IComponent).IsAssignableFrom(componentType))
+			{
+				if (components.Find(o => o.componentType == componentType) != null)
+				{
+					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => entities.Find(x => x.EntityID == o.entityID).SceneName == sceneName).ToList();
+				}
+			}
+
+			return new List<EntityComponent>();
+		}
+
 		/// <summary>
 		/// Creates an entity with entityData.
 		/// </summary>
 		/// <param name="name">The name of the entity.</param>
 		/// <param name="tag">Optional tag of the entity.</param>
-		public static void CreateEntity(string name, string tag = "Default")
+		public static void CreateEntity(string name, string tag = "Default", string scene = "")
 		{
-			EntityData data = new EntityData(nextEntity, name, tag);
+			EntityData data = new EntityData(nextEntity, name, scene, tag);
 			entities.Add(data);
 			nextEntity++;
 		}
@@ -266,7 +305,7 @@ namespace ECSEngine
 
 						foreach (System system in systems)
 						{
-							system.AddEntityComponent(entityID, GetEntityComponents(entityID));
+							system.AddEntityComponents(entityID, GetEntityComponents(entityID));
 						}
 					}
 				}
@@ -503,7 +542,7 @@ namespace ECSEngine
 			{
 				for (int j = components[i].entityComponents.Count - 1; j >= 0; j--)
 				{
-					EntityData eData = entities.Find(o => o.Name == entityName && o.EntityID == components[i].entityComponents[j].entityID);
+					EntityData eData = entities.Find(o => o.Name == entityName && o.EntityID == components[i].entityComponents[j].entityID && SceneManager.SceneExists(o.SceneName));
 
 					//make sure entity exists
 					if (!eData.Equals(default(EntityData)))
@@ -530,7 +569,7 @@ namespace ECSEngine
 				for (int j = components[i].entityComponents.Count - 1; j >= 0; j--)
 				{
 					//Make sure entity exists
-					if (!entities.Find(o => o.EntityID == entityID).Equals(default(EntityData)))
+					if (!entities.Find(o => o.EntityID == entityID && SceneManager.SceneExists(o.SceneName)).Equals(default(EntityData)))
 					{
 						if (components[i].entityComponents[j].entityID == entityID)
 						{

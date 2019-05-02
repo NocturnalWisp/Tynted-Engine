@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\GetComponents.cs" />
+    <Compile Include="Attributes\RequireScenes.cs" />
     <Compile Include="Attributes\RequireTags.cs" />
     <Compile Include="Components\Component.cs" />
     <Compile Include="Components\EntityComponentIdentifier.cs" />
@@ -112,6 +113,8 @@
     <Compile Include="Physics\Dynamics\Joints\RevoluteJoint.cs" />
     <Compile Include="Physics\Dynamics\World.cs" />
     <Compile Include="Physics\Dynamics\WorldCallbacks.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="SceneManager.cs" />
     <Compile Include="SFML\SFML.Audio\Listener.cs" />
     <Compile Include="SFML\SFML.Audio\Music.cs" />
     <Compile Include="SFML\SFML.Audio\Sound.cs" />

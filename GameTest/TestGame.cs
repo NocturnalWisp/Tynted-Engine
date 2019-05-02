@@ -21,10 +21,14 @@ namespace GameTest
 
 		protected override void Initialize()
 		{
+			Scene fsh = new Scene("Fsh");
+
+			SceneManager.LoadScene(fsh);
+
 			//TODO: Something weird occurs when one is disabled and the second is enabled.
 			//They seem to not be grabbing the right component?
-			ECSManager.CreateEntity("Airship");
-			ECSManager.CreateEntity("Airship2");
+			ECSManager.CreateEntity("Airship", "Default");
+			ECSManager.CreateEntity("Airship2", "Default");
 
 			Texture sprite = new Texture("Resources/Art/AirShip.png");
 

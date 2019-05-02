@@ -22,6 +22,8 @@ namespace ECSEngine
 		//If the attribute RequireTag is used, then use these.
 		internal bool tagSpecific = false;
 		internal string[] tags;
+		internal bool sceneSpecific = false;
+		internal string[] scenes;
 
 		public System() { }
 
@@ -54,15 +56,18 @@ namespace ECSEngine
 		/// <summary>
 		/// For the engine to add new entity components.
 		/// </summary>
-		internal void AddEntityComponent(int entityID, List<IComponent> components)
+		internal void AddEntityComponents(int entityID, List<IComponent> components)
 		{
 			//Make sure all types are matched
 			if (types.All(T => components.Exists(x => T == x.GetType())))
 			{
-				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID && tags.Contains(o.Tag));
+				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID);
 
+				Console.WriteLine(((sceneSpecific && scenes.Contains(data.SceneName)) || !sceneSpecific));
+				
 				//check for tag if that attribute has been added.
-				if ((tagSpecific && !data.Equals(default)) || !tagSpecific)
+				if (((tagSpecific && tags.Contains(data.Tag)) || !tagSpecific) &&
+					((sceneSpecific && scenes.Contains(data.SceneName)) || !sceneSpecific))
 				{
 					//Make sure entity exists and components are empty
 					if (entities.Exists(o => o.entityID == entityID && o.components.Count <= 0))

@@ -46,6 +46,11 @@ namespace ECSEngine
 
 			InputManager.Initialize(window);
 
+			SceneManager.Initialize();
+
+			Scene emptyScene = new Scene("");
+			SceneManager.LoadScene(emptyScene);
+
 			if (gameOptions.forceLimit)
 			{
 				window.SetFramerateLimit(60);
@@ -63,6 +68,7 @@ namespace ECSEngine
 		/// <param name="e"></param>
 		private void WindowClosed(object sender, EventArgs e)
 		{
+			SceneManager.UnloadAllScenes(true);
 			OnClosed();
 
 			window.Close();
@@ -87,10 +93,12 @@ namespace ECSEngine
 				gameTime.totalTime = totalTime.ElapsedTime;
 
 				Update(gameTime);
+				SceneManager.Update(gameTime);
 
 				window.Clear(Color.Black);
 
 				Draw(window);
+				SceneManager.Draw(window);
 
 				window.Display();
 
