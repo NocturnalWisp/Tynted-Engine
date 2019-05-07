@@ -1,4 +1,4 @@
 # Tynted Engine
-![Tynted Logo](https://github.com/rogersteve97/TyntedWikiResources/blob/master/TyntedLogo.pnghttps://github.com/rogersteve97/TyntedWikiResources/TyntedLogo.png)
+![Tynted Logo](https://github.com/rogersteve97/TyntedWikiResources/blob/master/TyntedLogo.png)
 
 An engine created to test out the Entity Component System.
