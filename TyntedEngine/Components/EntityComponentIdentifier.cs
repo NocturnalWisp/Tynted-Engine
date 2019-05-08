@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tynted.Components
 {
+	/// <summary>
+	/// Identifies an entity name to a component that entity has.
+	/// </summary>
 	public struct EntityComponentIdentifier
 	{
 		public string name;
