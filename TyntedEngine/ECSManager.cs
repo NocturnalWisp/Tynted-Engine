@@ -11,6 +11,7 @@ namespace Tynted
 	public class ECSManager
 	{
 		internal static List<EntityData> entities = new List<EntityData>();
+        public static List<EntityData> GetEntityData { get => entities; }
 		static int nextEntity = 0;
 
 		static List<System> systems = new List<System>();

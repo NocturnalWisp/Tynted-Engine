@@ -5,6 +5,7 @@ using Transform = Tynted.Components.Transform;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Tynted.Systems
 {
@@ -28,7 +29,7 @@ namespace Tynted.Systems
 				window.Draw(sr.sprite);
 
 				entity.SetComponent(sr);
-			}
+            }
 
 			base.Draw(window);
 		}
