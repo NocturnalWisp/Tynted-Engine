@@ -129,7 +129,6 @@ namespace Box2DNet.Collision
 			_pairManager.Initialize(this, callback);
 
 			_worldAABB = worldAABB;
-			Console.WriteLine(worldAABB.UpperBound);
 			_proxyCount = 0;
 
 			Vector2 d = worldAABB.UpperBound - worldAABB.LowerBound;
