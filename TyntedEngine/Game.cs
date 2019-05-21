@@ -43,11 +43,7 @@ namespace Tynted
 			}
 
 			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
-
-			InputManager.Initialize(window);
-
-			SceneManager.Initialize();
-
+            
 			Scene emptyScene = new Scene("");
 			SceneManager.LoadScene(emptyScene);
 
@@ -93,12 +89,10 @@ namespace Tynted
 				gameTime.totalTime = totalTime.ElapsedTime;
 
 				Update(gameTime);
-				SceneManager.Update(gameTime);
 
 				window.Clear(Color.Black);
 
 				Draw(window);
-				SceneManager.Draw(window);
 
 				window.Display();
 
@@ -111,9 +105,12 @@ namespace Tynted
 		/// Place all entity and system initialization here.
 		/// </summary>
 		protected virtual void Initialize()
-		{
-			ECSManager.Initialize();
-		}
+        {
+            InputManager.Initialize(window);
+            ECSManager.Initialize();
+            Console.WriteLine("Initializing Scenes...");
+            SceneManager.Initialize();
+        }
 
 		/// <summary>
 		/// The update method that runs through all the systems and updates them.
@@ -122,7 +119,8 @@ namespace Tynted
 		protected virtual void Update(GameTime gameTime)
 		{
 			ECSManager.Update(gameTime);
-		}
+            SceneManager.Update(gameTime);
+        }
 
 		/// <summary>
 		/// The draw method that loops through each system and draws them.
@@ -131,7 +129,8 @@ namespace Tynted
 		protected virtual void Draw(RenderWindow renderWindow)
 		{
 			ECSManager.Draw(renderWindow);
-		}
+            SceneManager.Draw(window);
+        }
 
 		/// <summary>
 		/// Callback when the game window is closed.

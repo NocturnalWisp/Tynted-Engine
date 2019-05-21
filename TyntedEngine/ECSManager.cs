@@ -198,7 +198,7 @@ namespace Tynted
 			{
 				if (components.Find(o => o.componentType == componentType) != null)
 				{
-					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => SceneManager.SceneExists(entities.Find(x => x.EntityID == o.entityID).SceneName)).ToList();
+					return components.Find(o => o.componentType == componentType).entityComponents;
 				}
 			}
 
@@ -261,9 +261,9 @@ namespace Tynted
 		/// <param name="entityID">The ID of the entity to add the component to.</param>
 		/// <param name="component">The component to add to the entity.</param>
 		internal static void AddEntityComponent(int entityID, IComponent component)
-		{
-			//make sure it has component
-			if (components.Find(o => o.componentType == component.GetType()) != null)
+        {
+            //make sure it has component
+            if (components.Find(o => o.componentType == component.GetType()) != null)
 			{
 				//Make sure entity exists
 				if (!entities.Find(o => o.EntityID == entityID).Equals(default(EntityData)))
@@ -272,7 +272,7 @@ namespace Tynted
 					if (!GetComponentEntityList(component.GetType()).Exists(o => o.entityID == entityID))
 					{
 						components.Find(o => o.componentType == component.GetType()).entityComponents.Add(new EntityComponent(entityID, component));
-
+                        
 						foreach (System system in systems)
 						{
 							system.AddEntityComponents(entityID, GetEntityComponents(entityID));
@@ -539,7 +539,7 @@ namespace Tynted
 				for (int j = components[i].entityComponents.Count - 1; j >= 0; j--)
 				{
 					//Make sure entity exists
-					if (!entities.Find(o => o.EntityID == entityID && SceneManager.SceneExists(o.SceneName)).Equals(default(EntityData)))
+					if (!entities.Find(o => o.EntityID == entityID).Equals(default(EntityData)))
 					{
 						if (components[i].entityComponents[j].entityID == entityID)
 						{
@@ -551,15 +551,81 @@ namespace Tynted
 
 			return componentList;
 		}
-		#endregion
-		#region Event Functions
-		#region Create Events
-		/// <summary>
-		/// Creates a new event with 0 parameters.
-		/// </summary>
-		/// <param name="name">The name identifier of the event.</param>
-		/// <returns>The created event, or null if already created.</returns>
-		public static TyntedEvent CreateEvent(string name)
+
+        #region Scenes
+        /// <summary>
+        /// Returns a list of all the entities in a scene
+        /// </summary>
+        internal static List<Entity> GetSceneEntities(string sceneName)
+        {
+            List<Entity> entityList = new List<Entity>();
+
+            foreach (Component component in components)
+            {
+                foreach (EntityComponent entityComponent in component.entityComponents)
+                {
+                    EntityData eData = entities.Find(o => o.EntityID == entityComponent.entityID && SceneManager.SceneExists(o.SceneName) && o.SceneName.Equals(sceneName));
+
+                    //make sure entity exists
+                    if (!eData.Equals(default))
+                    {
+                        //check if it exists in the new list yet
+                        if (!entityList.Exists(o => o.entityID == entityComponent.entityID))
+                        {
+                            Entity entity = new Entity(entityComponent.entityID);
+                            entityList.Add(entity);
+                            entity.components.Add(entityComponent.component);
+                        }
+                        else
+                        {
+                            entityList.Find(o => o.entityID == entityComponent.entityID).components.Add(entityComponent.component);
+                        }
+                    }
+                }
+            }
+
+            return entityList;
+        }
+
+        /// <summary>
+        /// Sets all the components that are within a scene.
+        /// </summary>
+        /// <param name="sceneEntities">The list of entities the scene has.</param>
+        internal static void SetSceneEntities(List<Entity> sceneEntities, string sceneName)
+        {
+            if (!SceneManager.SceneExists(sceneName))
+                return;
+
+            foreach (Entity entity in sceneEntities)
+            {
+                for (int componentTypeIndex = 0; componentTypeIndex < components.Count; componentTypeIndex++)
+                {
+                    List<EntityComponent> entityComponents = components[componentTypeIndex].entityComponents.Where(o => o.entityID == entity.entityID).ToList();
+                    for (int entityComponentIndex = 0; entityComponentIndex < entityComponents.Count; entityComponentIndex++)
+                    {
+                        //TODO: May be broken if objects were removed or added to a scene...
+                        if (entityComponents[entityComponentIndex].entityID == entity.entityID)
+                        {
+                            EntityComponent ec = entityComponents[entityComponentIndex];
+                            ec.component = entity.components.Find(o => o.GetType().Equals(entityComponents[entityComponentIndex].component));
+                            entityComponents[entityComponentIndex] = ec;
+                        }
+                    }
+                    components[componentTypeIndex].entityComponents = entityComponents;
+                }
+            }
+        }
+        #endregion
+
+        #endregion
+        #region Event Functions
+        #region Create Events
+        /// <summary>
+        /// Creates a new event with 0 parameters.
+        /// </summary>
+        /// <param name="name">The name identifier of the event.</param>
+        /// <returns>The created event, or null if already created.</returns>
+        public static TyntedEvent CreateEvent(string name)
 		{
 			TyntedEvent ev = null;
 

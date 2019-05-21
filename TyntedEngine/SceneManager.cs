@@ -34,11 +34,19 @@ namespace Tynted
 			if (sceneName == "")
 				return;
 
+            foreach (Scene scene in currentScenes.Where(o => o.SceneName.Equals(sceneName)))
+            {
+                scene.OnClosed();
+            }
+
+            //dereferences it from the list
 			currentScenes.RemoveAll(o => o.SceneName == sceneName);
 		}
 
 		public static void UnloadScene(Scene scene)
 		{
+            scene.OnClosed();
+
 			currentScenes.Remove(scene);
 		}
 
@@ -54,25 +62,43 @@ namespace Tynted
 			{
 				currentScenes.RemoveAll(o => o.SceneName != "");
 			}
-		}
+        }
 
-		//TODO: Having the function take in an entity name could 
-		//cause problems if there are multiple entities of the same name.
-		/// <summary>
-		/// Prevents the entity from being destroyed when a new scene is loaded.
-		/// </summary>
-		/// <param name="entityName">The name of the entity.</param>
-		public static void CarryableEntity(string entityName)
-		{
-			EntityData data = ECSManager.entities.Find(o => o.Name == entityName);
+        public static void PauseScene(string sceneName)
+        {
+            foreach (Scene scene in currentScenes.Where(o => !o.paused && o.SceneName.Equals(sceneName)))
+            {
+                scene.paused = true;
+            }
+        }
 
-			data.SceneName = "";
-		}
+        public static void PauseScene(Scene scene)
+        {
+            scene.paused = true;
+        }
 
-		internal static bool SceneExists(string sceneName)
+        public static void ResumeScene(string sceneName)
+        {
+            foreach (Scene scene in currentScenes.Where(o => !o.paused && o.SceneName.Equals(sceneName)))
+            {
+                scene.paused = false;
+            }
+        }
+
+        public static void ResumeScene(Scene scene)
+        {
+            scene.paused = false;
+        }
+
+        public static bool SceneExists(string sceneName)
 		{
 			return currentScenes.Exists(o => o.SceneName == sceneName);
 		}
+
+        public static Scene GetSceneByName(string sceneName)
+        {
+            return currentScenes.Find(o => o.SceneName.Equals(sceneName));
+        }
 
 		internal static void Initialize()
 		{

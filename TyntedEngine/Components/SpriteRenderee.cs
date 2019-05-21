@@ -22,5 +22,5 @@ namespace Tynted.Components
 			sprite = new Sprite(texture);
 			Enabled = true;
 		}
-	}
+    }
 }

@@ -57,17 +57,17 @@ namespace Tynted
 		/// For the engine to add new entity components.
 		/// </summary>
 		internal void AddEntityComponents(int entityID, List<IComponent> components)
-		{
-			//Make sure all types are matched
-			if (types.All(T => components.Exists(x => T == x.GetType())))
+        {
+            //Make sure all types are matched
+            if (types.All(o => components.Exists(x => o.Equals(x.GetType()))))
 			{
 				EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID);
-				
-				//check for tag if that attribute has been added.
-				if (((tagSpecific && tags.Contains(data.Tag)) || !tagSpecific) &&
+
+                //check for tag if that attribute has been added.
+                if (((tagSpecific && tags.Contains(data.Tag)) || !tagSpecific) &&
 					((sceneSpecific && scenes.Contains(data.SceneName)) || !sceneSpecific))
 				{
-					//Make sure entity exists and components are empty
+					//Check if entity exists and components are empty
 					if (entities.Exists(o => o.entityID == entityID && o.components.Count <= 0))
 					{
 						entities[entities.IndexOf(entities.Find(o => o.entityID == entityID))].components = components.FindAll(o => types.Contains(o.GetType()));
@@ -133,12 +133,15 @@ namespace Tynted
 		}
 
 		/// <summary>
-		/// Gets the entity list.
+		/// Gets the entity list that are currently in a scene.
 		/// </summary>
 		/// <returns>The entity list.</returns>
 		protected List<Entity> GetEntities()
 		{
-			return entities;
+			return entities.Where(o =>
+                SceneManager.SceneExists(ECSManager.entities.Find(x => x.EntityID == o.entityID).SceneName) && 
+                !SceneManager.GetSceneByName(ECSManager.entities.Find(x => x.EntityID == o.entityID).SceneName).Paused
+            ).ToList();
 		}
 	}
 }

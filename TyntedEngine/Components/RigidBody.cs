@@ -48,5 +48,5 @@ namespace Tynted.Components
 
 			Enabled = true;
 		}
-	}
+    }
 }

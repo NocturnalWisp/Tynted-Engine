@@ -43,7 +43,7 @@ namespace Tynted.Systems
 		{
 			var allTypes = GetEntities();
 
-			world.Step(gameTime.elapsedTime.AsSeconds(), 8, 3);
+            world.Step(gameTime.elapsedTime.AsSeconds(), 8, 3);
 
 			foreach (Entity entity in allTypes)
 			{

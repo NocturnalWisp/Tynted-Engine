@@ -10,7 +10,7 @@ using System;
 namespace Tynted.Systems
 {
 	[GetComponents(typeof(SpriteRenderee), typeof(Components.Transform))]
-	class SpriteRenderer : System
+	public class SpriteRenderer : System
 	{
 		public override void Draw(RenderWindow window)
 		{
