@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TyntedEngine</RootNamespace>
     <AssemblyName>TyntedEngine</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,9 +39,31 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="SFML.Audio, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFML.Audio.2.5.0\lib\netstandard2.0\SFML.Audio.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SFML.Graphics, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFML.Graphics.2.5.0\lib\netstandard2.0\SFML.Graphics.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SFML.System, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFML.System.2.5.0\lib\netstandard2.0\SFML.System.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SFML.Window, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFML.Window.2.5.0\lib\netstandard2.0\SFML.Window.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
@@ -66,6 +89,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameOptions.cs" />
     <Compile Include="GameTime.cs" />
+    <Compile Include="IO\AudioManager.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="IO\InputManager.cs" />
     <Compile Include="IO\JsonManager.cs" />
@@ -122,62 +146,6 @@
     <Compile Include="Physics\Dynamics\WorldCallbacks.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="SceneManager.cs" />
-    <Compile Include="SFML\SFML.Audio\Listener.cs" />
-    <Compile Include="SFML\SFML.Audio\Music.cs" />
-    <Compile Include="SFML\SFML.Audio\Sound.cs" />
-    <Compile Include="SFML\SFML.Audio\SoundBuffer.cs" />
-    <Compile Include="SFML\SFML.Audio\SoundBufferRecorder.cs" />
-    <Compile Include="SFML\SFML.Audio\SoundRecorder.cs" />
-    <Compile Include="SFML\SFML.Audio\SoundStream.cs" />
-    <Compile Include="SFML\SFML.Graphics\BlendMode.cs" />
-    <Compile Include="SFML\SFML.Graphics\CircleShape.cs" />
-    <Compile Include="SFML\SFML.Graphics\Color.cs" />
-    <Compile Include="SFML\SFML.Graphics\ConvexShape.cs" />
-    <Compile Include="SFML\SFML.Graphics\Drawable.cs" />
-    <Compile Include="SFML\SFML.Graphics\Font.cs" />
-    <Compile Include="SFML\SFML.Graphics\Glsl.cs" />
-    <Compile Include="SFML\SFML.Graphics\Glyph.cs" />
-    <Compile Include="SFML\SFML.Graphics\Image.cs" />
-    <Compile Include="SFML\SFML.Graphics\PrimitiveType.cs" />
-    <Compile Include="SFML\SFML.Graphics\Rect.cs" />
-    <Compile Include="SFML\SFML.Graphics\RectangleShape.cs" />
-    <Compile Include="SFML\SFML.Graphics\RenderStates.cs" />
-    <Compile Include="SFML\SFML.Graphics\RenderTarget.cs" />
-    <Compile Include="SFML\SFML.Graphics\RenderTexture.cs" />
-    <Compile Include="SFML\SFML.Graphics\RenderWindow.cs" />
-    <Compile Include="SFML\SFML.Graphics\Shader.cs" />
-    <Compile Include="SFML\SFML.Graphics\Shape.cs" />
-    <Compile Include="SFML\SFML.Graphics\Sprite.cs" />
-    <Compile Include="SFML\SFML.Graphics\Text.cs" />
-    <Compile Include="SFML\SFML.Graphics\Texture.cs" />
-    <Compile Include="SFML\SFML.Graphics\Transform.cs" />
-    <Compile Include="SFML\SFML.Graphics\Transformable.cs" />
-    <Compile Include="SFML\SFML.Graphics\Vertex.cs" />
-    <Compile Include="SFML\SFML.Graphics\VertexArray.cs" />
-    <Compile Include="SFML\SFML.Graphics\VertexBuffer.cs" />
-    <Compile Include="SFML\SFML.Graphics\View.cs" />
-    <Compile Include="SFML\SFML.System\Clock.cs" />
-    <Compile Include="SFML\SFML.System\LoadingFailedException.cs" />
-    <Compile Include="SFML\SFML.System\ObjectBase.cs" />
-    <Compile Include="SFML\SFML.System\SharedLibName.cs" />
-    <Compile Include="SFML\SFML.System\StreamAdaptor.cs" />
-    <Compile Include="SFML\SFML.System\Time.cs" />
-    <Compile Include="SFML\SFML.System\Vector2.cs" />
-    <Compile Include="SFML\SFML.System\Vector3.cs" />
-    <Compile Include="SFML\SFML.Window\Clipboard.cs" />
-    <Compile Include="SFML\SFML.Window\Context.cs" />
-    <Compile Include="SFML\SFML.Window\ContextSettings.cs" />
-    <Compile Include="SFML\SFML.Window\Cursor.cs" />
-    <Compile Include="SFML\SFML.Window\Event.cs" />
-    <Compile Include="SFML\SFML.Window\EventArgs.cs" />
-    <Compile Include="SFML\SFML.Window\Joystick.cs" />
-    <Compile Include="SFML\SFML.Window\Keyboard.cs" />
-    <Compile Include="SFML\SFML.Window\LoadingFailedException.cs" />
-    <Compile Include="SFML\SFML.Window\Mouse.cs" />
-    <Compile Include="SFML\SFML.Window\Sensor.cs" />
-    <Compile Include="SFML\SFML.Window\Touch.cs" />
-    <Compile Include="SFML\SFML.Window\VideoMode.cs" />
-    <Compile Include="SFML\SFML.Window\Window.cs" />
     <Compile Include="Systems\Entity.cs" />
     <Compile Include="Systems\System.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,21 +158,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="csfml-audio.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-graphics.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-network.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-system.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="csfml-window.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="csfml-audio-2.dll" />
+    <EmbeddedResource Include="csfml-graphics-2.dll" />
+    <EmbeddedResource Include="csfml-network-2.dll" />
+    <EmbeddedResource Include="csfml-system-2.dll" />
+    <EmbeddedResource Include="csfml-window-2.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
