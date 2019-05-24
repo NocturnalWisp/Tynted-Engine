@@ -154,21 +154,23 @@ namespace Tynted.Components
 
 		public Vec2 GetWorldPosition()
 		{
-			Matrix transformMatrix = GetLocalToWorldMatrixSeperate().Item1;
-			return new Vec2(transformMatrix.m13, transformMatrix.m23);
+			//Matrix transformMatrix = GetLocalToWorldMatrixSeperate().Item1;
+			//return new Vec2(transformMatrix.m13, transformMatrix.m23);
+
+            return TransformPoint(new Vec2(0, 0));
 		}
 
-		public float GetWorldRotation()
-		{
-			Matrix transformMatrix = GetLocalToWorldMatrixSeperate().Item2;
-			return (float)Math.Atan2(transformMatrix.m21, transformMatrix.m11);
-		}
+		//public float GetWorldRotation()
+		//{
+		//	Matrix transformMatrix = GetLocalToWorldMatrixSeperate().Item2;
+		//	return (float)Math.Atan2(transformMatrix.m21, transformMatrix.m11);
+		//}
 
-		public Vec2 GetWorldScale()
-		{
-			Matrix transformMatrix = GetLocalToWorldMatrixSeperate().Item1;
-			return new Vec2(transformMatrix.m11, transformMatrix.m22);
-		}
+		//public Vec2 GetWorldScale()
+		//{
+		//	Matrix transformMatrix = GetLocalToWorldMatrixSeperate().Item1;
+		//	return new Vec2(transformMatrix.m11, transformMatrix.m22);
+		//}
 
 		private Matrix GetWorldToLocalMatrix()
 		{

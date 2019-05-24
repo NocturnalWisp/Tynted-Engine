@@ -23,8 +23,8 @@ namespace Tynted.Systems
 
 				//Set sprite values based on transform
 				sr.sprite.Position = t.GetWorldPosition();
-				sr.sprite.Rotation = t.GetWorldRotation();
-				sr.sprite.Scale = t.GetWorldScale();
+				sr.sprite.Rotation = t.LocalRotation;
+				sr.sprite.Scale = t.LocalScale;
 
 				window.Draw(sr.sprite);
 

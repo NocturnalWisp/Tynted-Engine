@@ -30,6 +30,7 @@ namespace Tynted.Components
                 SpriteRenderee newSpriteRenderee = new SpriteRenderee(texture);
 
                 newSpriteRenderee.Enabled = Enabled;
+                newSpriteRenderee.sprite = new Sprite(sprite);
 
                 return newSpriteRenderee;
             }
