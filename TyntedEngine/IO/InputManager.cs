@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using static Tynted.SFML.Window.Keyboard;
 using static Tynted.SFML.Window.Mouse;
 
-namespace Tynted.Input
+namespace Tynted.IO
 {
 	public static class InputManager
 	{

@@ -9,5 +9,7 @@ namespace Tynted
 	public interface IComponent
 	{
 		bool Enabled { get; set; }
+
+        IComponent Clone { get; }
 	}
 }

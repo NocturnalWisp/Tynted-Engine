@@ -20,6 +20,8 @@ namespace Tynted.Components
 		private Shape shape;
 		public Body body;
 
+        World world;
+
 		/// <summary>
 		/// Creates a new RigidBody Component.
 		/// </summary>
@@ -31,6 +33,8 @@ namespace Tynted.Components
 		{
 			velocity = initialVelocity;
 			this.mass = mass;
+
+            this.world = world;
 
 			body = world.CreateBody(new BodyDef() { LinearVelocity = velocity, MassData = new MassData() { Mass = mass } });
 
@@ -48,5 +52,17 @@ namespace Tynted.Components
 
 			Enabled = true;
 		}
+
+        public IComponent Clone
+        {
+            get
+            {
+                RigidBody newRigidBody = new RigidBody(velocity, world, mass, shape);
+
+                newRigidBody.Enabled = Enabled;
+
+                return newRigidBody;
+            }
+        }
     }
 }

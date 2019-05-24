@@ -1,4 +1,4 @@
-﻿using Tynted.Input;
+﻿using Tynted.IO;
 using Tynted.SFML.Graphics;
 using Tynted.SFML.System;
 using Tynted.SFML.Window;
@@ -43,8 +43,8 @@ namespace Tynted
 			}
 
 			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
-            
-			Scene emptyScene = new Scene("");
+
+            Scene emptyScene = new Scene("", false, null);
 			SceneManager.LoadScene(emptyScene);
 
 			if (gameOptions.forceLimit)

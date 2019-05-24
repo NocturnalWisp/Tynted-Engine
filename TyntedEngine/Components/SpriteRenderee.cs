@@ -22,5 +22,17 @@ namespace Tynted.Components
 			sprite = new Sprite(texture);
 			Enabled = true;
 		}
+
+        public IComponent Clone
+        {
+            get
+            {
+                SpriteRenderee newSpriteRenderee = new SpriteRenderee(texture);
+
+                newSpriteRenderee.Enabled = Enabled;
+
+                return newSpriteRenderee;
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ using static Tynted.SFML.Window.Keyboard;
 using static Tynted.SFML.Window.Joystick;
 using Tynted.SFML.Window;
 
-namespace Tynted.Input
+namespace Tynted.IO
 {
 	/// <summary>
 	/// Input bindings.

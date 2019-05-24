@@ -210,29 +210,36 @@ namespace Tynted
 		/// </summary>
 		/// <param name="name">The name of the entity.</param>
 		/// <param name="tag">Optional tag of the entity.</param>
-		public static void CreateEntity(string name, string tag = "Default", string scene = "")
+		public static int? CreateEntity(string name, string tag = "Default", string scene = "")
 		{
-			EntityData data = new EntityData(nextEntity, name, scene, tag);
-			entities.Add(data);
-			nextEntity++;
+            if (!entities.Exists(o => o.Name == name && o.Tag == tag && o.SceneName == scene))
+            {
+                EntityData data = new EntityData(nextEntity, name, scene, tag);
+                entities.Add(data);
+                nextEntity++;
+
+                return data.EntityID;
+            }
+
+            return null;
 		}
 
 		/// <summary>
 		/// Removes an entity completely from existance.
 		/// </summary>
 		/// <param name="name">The name of the entity.</param>
-		public static void DeleteEntity(string name)
+		public static void DeleteEntity(string name, string tag, string sceneName)
 		{
 			foreach (System system in systems)
 			{
-				system.RemoveEntity(entities.Find(o => o.Name == name).EntityID);
+				system.RemoveEntity(entities.Find(o => o.Name == name && o.Tag == tag && o.SceneName == sceneName).EntityID);
 			}
 
 			//Remove all components from the entity
 			RemoveAllEntityComponents(name);
 
 			//Remove the entity;
-			entities.Remove(entities.Find(o => o.Name == name));
+			entities.Remove(entities.Find(o => o.Name == name && o.Tag == tag && o.SceneName == sceneName));
 		}
 
 		/// <summary>
@@ -260,7 +267,7 @@ namespace Tynted
 		/// </summary>
 		/// <param name="entityID">The ID of the entity to add the component to.</param>
 		/// <param name="component">The component to add to the entity.</param>
-		internal static void AddEntityComponent(int entityID, IComponent component)
+		internal static bool AddEntityComponent(int entityID, IComponent component)
         {
             //make sure it has component
             if (components.Find(o => o.componentType == component.GetType()) != null)
@@ -277,9 +284,13 @@ namespace Tynted
 						{
 							system.AddEntityComponents(entityID, GetEntityComponents(entityID));
 						}
+
+                        return true;
 					}
 				}
 			}
+
+            return false;
 		}
 
 		/// <summary>
@@ -512,7 +523,7 @@ namespace Tynted
 			{
 				for (int j = components[i].entityComponents.Count - 1; j >= 0; j--)
 				{
-					EntityData eData = entities.Find(o => o.Name == entityName && o.EntityID == components[i].entityComponents[j].entityID && SceneManager.SceneExists(o.SceneName));
+					EntityData eData = entities.Find(o => o.Name == entityName && o.EntityID == components[i].entityComponents[j].entityID);
 
 					//make sure entity exists
 					if (!eData.Equals(default(EntityData)))

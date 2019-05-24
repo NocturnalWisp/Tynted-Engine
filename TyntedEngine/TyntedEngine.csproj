@@ -65,8 +65,10 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameOptions.cs" />
     <Compile Include="GameTime.cs" />
-    <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Input\KeyBinding.cs" />
+    <Compile Include="IO\FileManager.cs" />
+    <Compile Include="IO\InputManager.cs" />
+    <Compile Include="IO\JsonManager.cs" />
+    <Compile Include="IO\KeyBinding.cs" />
     <Compile Include="Physics\Collision\BroadPhase.cs" />
     <Compile Include="Physics\Collision\Collision.CollideCircle.cs" />
     <Compile Include="Physics\Collision\Collision.CollideEdge.cs" />

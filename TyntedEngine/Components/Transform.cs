@@ -28,6 +28,25 @@ namespace Tynted.Components
 
 		private Matrix worldToLocalMatrix = Matrix.Identity;
 
+        public IComponent Clone
+        {
+            get
+            {
+                Transform newTransform = new Transform(localPosition, localRotation, localScale);
+
+                newTransform.Enabled = Enabled;
+                newTransform.parent = parent;
+                newTransform.children = new List<Transform>(children);
+                newTransform.isDirty = isDirty;
+                newTransform.localToWorldMatrix = localToWorldMatrix;
+                newTransform.localToWorldMatrixSeperate = localToWorldMatrixSeperate;
+                newTransform.isInverseDirty = isInverseDirty;
+                newTransform.worldToLocalMatrix = worldToLocalMatrix;
+
+                return newTransform;
+            }
+        }
+
 		public Transform(Vec2 position, float rotation = 0, Vec2 scale = default)
 		{
 			parent = null;

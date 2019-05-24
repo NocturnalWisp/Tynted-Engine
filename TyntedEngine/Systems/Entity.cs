@@ -4,6 +4,9 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tynted.Components;
+using Tynted.SFML.Graphics;
+using Transform = Tynted.Components.Transform;
 
 namespace Tynted
 {
@@ -55,5 +58,60 @@ namespace Tynted
 		{
 			components[components.FindIndex(o => o.GetType() == component.GetType())] = component;
 		}
-	}
+
+        #region Entity Templates
+        //IMPORTANT!!!!! Fix any discrepancies within Scene to make sure
+        //               the template entities in scene json files are 
+        //               updated properly.
+        public static void CreateEmpty(string name, string tag, string scene)
+        {
+            ECSManager.CreateEntity(name, tag, scene);
+        }
+
+        public static void CreateTransform(string name, string tag, string scene)
+        {
+            ECSManager.CreateEntity(name, tag, scene);
+            ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0)));
+        }
+
+        public static void CreateSprite(string name, string tag, string scene, Texture texture)
+        {
+            ECSManager.CreateEntity(name, tag, scene);
+            ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0)));
+            ECSManager.AddEntityComponent(name, new SpriteRenderee(texture));
+        }
+        #endregion
+
+        #region Cloning
+        public static void CloneEntity(string clonable, string entityName, string clonableTag, string clonableSceneName)
+        {
+            EntityData data = ECSManager.entities.Find(o => o.Name == clonable && o.Tag == clonableTag && o.SceneName == clonableSceneName);
+            
+            int? i = ECSManager.CreateEntity(entityName, clonableTag, clonableSceneName);
+
+            if (i != null)
+            {
+                foreach (IComponent component in ECSManager.GetEntityComponents(clonable))
+                {
+                    ECSManager.AddEntityComponent((int)i, component.Clone);
+                }
+            }
+        }
+
+        public static void CloneEntity(int entityID)
+        {
+            EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID);
+
+            int? i = ECSManager.CreateEntity(data.Name + " (Clone)", data.Tag, data.SceneName);
+
+            if (i != null)
+            {
+                foreach (IComponent component in ECSManager.GetEntityComponents(data.Name))
+                {
+                    ECSManager.AddEntityComponent(entityID, component.Clone);
+                }
+            }
+        }
+        #endregion
+    }
 }
