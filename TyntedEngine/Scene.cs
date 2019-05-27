@@ -118,7 +118,23 @@ namespace Tynted
                                     {
                                         try
                                         {
-                                            Type componentType = Type.GetType("Tynted.Components." + jsonComponent.Key);
+                                            Type[] componentTypes = GetTypesByName(jsonComponent.Key);
+                                            Type componentType = null;
+
+                                            foreach (Type t in componentTypes)
+                                            {
+                                                if (t.Namespace.Equals("Tynted.Components"))
+                                                {
+                                                    componentType = t;
+                                                }
+                                            }
+
+                                            if (componentType == null)
+                                            {
+                                                componentType = componentTypes[0];
+                                            }
+
+                                            Console.WriteLine("Found component of type: " + componentType + " on entity: " + entityName);
 
                                             object[] args = jsonComponent.Value.Value<JArray>().ToObject<object[]>();
 
@@ -177,7 +193,26 @@ namespace Tynted
             }
         }
 
-		internal virtual void Initialize()
+        private static Type[] GetTypesByName(string className)
+        {
+            List<Type> returnVal = new List<Type>();
+
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] assemblyTypes = a.GetTypes();
+                for (int j = 0; j < assemblyTypes.Length; j++)
+                {
+                    if (assemblyTypes[j].Name == className)
+                    {
+                        returnVal.Add(assemblyTypes[j]);
+                    }
+                }
+            }
+
+            return returnVal.ToArray();
+        }
+
+        internal virtual void Initialize()
 		{
             initalEntities = ECSManager.GetSceneEntities(SceneName);
             entities = initalEntities;
