@@ -1,5 +1,5 @@
 # Tynted Engine
-<p><a href=https://github.com/rogersteve97/TyntedWikiResources/blob/master/TyntedLogo_medium.png alt="Tynted Logo" /></p>
+<p><a href=https://github.com/rogersteve97/TyntedWikiResources/blob/master/TyntedLogo_medium.png alt="Tynted Logo"></a></p>
 
 Tynted Engine was created so I could test out the Entity Component System design pattern for the first time. Other patterns like the observer pattern help to keep each part of the engine non-dependant upon the other parts. 
 
