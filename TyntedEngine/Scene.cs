@@ -134,8 +134,6 @@ namespace Tynted
                                                 componentType = componentTypes[0];
                                             }
 
-                                            Console.WriteLine("Found component of type: " + componentType + " on entity: " + entityName);
-
                                             object[] args = jsonComponent.Value.Value<JArray>().ToObject<object[]>();
 
                                             for (int i = 0; i < args.Length; i++)

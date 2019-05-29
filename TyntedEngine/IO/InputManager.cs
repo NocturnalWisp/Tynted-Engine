@@ -152,6 +152,8 @@ namespace Tynted.IO
 
 		private static void GamePadButtonPressed(object sender, JoystickButtonEventArgs e)
 		{
+            if(bindings.Count(o => o.GamePadButtons.Count > 0) <= 0) return;
+
 			for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
 			{
 				KeyBinding kb = bindings[bindingIndex];
@@ -175,8 +177,10 @@ namespace Tynted.IO
 		}
 
 		private static void GamePadButtonReleased(object sender, JoystickButtonEventArgs e)
-		{
-			for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
+        {
+            if (bindings.Count(o => o.GamePadButtons.Count > 0) <= 0) return;
+
+            for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
 			{
 				KeyBinding kb = bindings[bindingIndex];
 

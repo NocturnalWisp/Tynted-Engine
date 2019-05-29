@@ -65,56 +65,63 @@ namespace Tynted
 		}
 
 		#region System and Component Utility Functions
+        public static void AddSystem<T>() where T : System
+        {
+            AddSystem(typeof(T));
+        }
+
 		/// <summary>
 		/// Add a system to the system types list.
 		/// </summary>
 		/// <param name="systemType">The type of system to add.</param>
-		public static void AddSystem(Type systemType)
-		{
-			if (typeof(System).IsAssignableFrom(systemType))
+		internal static void AddSystem(Type systemType)
+	    {
+			if (systems.Find(o => o.GetType() == systemType) == null)
 			{
-				if (systems.Find(o => o.GetType() == systemType) == null)
+				bool typeAttributeUsed = false;
+				bool tagAttributeUsed = false;
+				bool sceneAttributeUsed = false;
+
+				System system = (System)Activator.CreateInstance(systemType);
+
+				//Check if has require components attribute
+				foreach (object attribute in systemType.GetCustomAttributes(false))
 				{
-					bool typeAttributeUsed = false;
-					bool tagAttributeUsed = false;
-					bool sceneAttributeUsed = false;
-
-					System system = (System)Activator.CreateInstance(systemType);
-
-					//Check if has require components attribute
-					foreach (object attribute in systemType.GetCustomAttributes(false))
+					if (attribute.GetType() == typeof(GetComponents))
 					{
-						if (attribute.GetType() == typeof(GetComponents))
-						{
-							system.types = ((GetComponents)attribute).Types;
-							typeAttributeUsed = true;
-						}
-
-						if (attribute.GetType() == typeof(RequireTags))
-						{
-							system.tagSpecific = true;
-							system.tags = ((RequireTags)attribute).tag;
-							tagAttributeUsed = true;
-						}
-
-						if (attribute.GetType() == typeof(RequireScenes))
-						{
-							system.sceneSpecific = true;
-							system.scenes = ((RequireScenes)attribute).scenes;
-							sceneAttributeUsed = true;
-						}
+						system.types = ((GetComponents)attribute).Types;
+						typeAttributeUsed = true;
 					}
 
-					if (!typeAttributeUsed) system.types = new Type[0];
-					if (!tagAttributeUsed) system.tags = new string[0];
-					if (!sceneAttributeUsed) system.scenes = new string[0];
+					if (attribute.GetType() == typeof(RequireTags))
+					{
+						system.tagSpecific = true;
+						system.tags = ((RequireTags)attribute).tag;
+						tagAttributeUsed = true;
+					}
 
-					systems.Add(system);
-
-					Console.WriteLine("Added system: " + systemType);
+					if (attribute.GetType() == typeof(RequireScenes))
+					{
+						system.sceneSpecific = true;
+						system.scenes = ((RequireScenes)attribute).scenes;
+						sceneAttributeUsed = true;
+					}
 				}
+
+				if (!typeAttributeUsed) system.types = new Type[0];
+				if (!tagAttributeUsed) system.tags = new string[0];
+				if (!sceneAttributeUsed) system.scenes = new string[0];
+
+				systems.Add(system);
+
+				Console.WriteLine("Added system: " + systemType);
 			}
 		}
+
+        public static void RemoveSystem<T>() where T : System
+        {
+            RemoveSystem(typeof(T));
+        }
 
 		/// <summary>
 		/// Remove a system from the system types list.
@@ -122,8 +129,7 @@ namespace Tynted
 		/// <param name="systemType">The type of system to remove.</param>
 		internal static void RemoveSystem(Type systemType)
 		{
-			if (typeof(System).IsAssignableFrom(systemType))
-				systems.RemoveAll(o => o.GetType() == systemType);
+			systems.RemoveAll(o => o.GetType() == systemType);
 		}
 
 		/// <summary>
@@ -135,22 +141,29 @@ namespace Tynted
 			return components.ToList();
 		}
 
+        public static void AddComponent<T>() where T : IComponent
+        {
+            AddComponent(typeof(T));
+        }
+
 		/// <summary>
 		/// Adds a component to the type of components list.
 		/// </summary>
 		/// <param name="componentType">The component type to add.</param>
-		public static void AddComponent(Type componentType)
+		internal static void AddComponent(Type componentType)
 		{
-			if (typeof(IComponent).IsAssignableFrom(componentType))
+			//Make sure component doesn't already exist
+			if (components.Find(o => o.componentType == componentType) == null)
 			{
-				//Make sure component doesn't already exist
-				if (components.Find(o => o.componentType == componentType) == null)
-				{
-					components.Add(new Component(componentType));
-					Console.WriteLine("Added component: " + componentType);
-				}
+				components.Add(new Component(componentType));
+				Console.WriteLine("Added component: " + componentType);
 			}
 		}
+
+        public static void RemoveComponent<T>() where T : IComponent
+        {
+            RemoveComponent(typeof(T));
+        }
 
 		/// <summary>
 		/// Removes a component from the component types list.
@@ -169,37 +182,42 @@ namespace Tynted
 
 		#endregion
 		#region Entities Utility Functions
-		/// <summary>
-		/// Gets all of the active entity components with a certain component type.
-		/// </summary>
-		/// <param name="componentType">The component type to search for.</param>
-		/// <returns>List of objects found.</returns>
-		public static List<EntityComponent> GetComponentEntityActiveList(Type componentType)
+
+        public static List<EntityComponent> GetComponentEntityActiveList<T>() where T : IComponent
+        {
+            return GetComponentEntityActiveList(typeof(T));
+        }
+
+        /// <summary>
+        /// Gets all of the active entity components with a certain component type.
+        /// </summary>
+        /// <param name="componentType">The component type to search for.</param>
+        /// <returns>List of objects found.</returns>
+        internal static List<EntityComponent> GetComponentEntityActiveList(Type componentType)
 		{
-			if (typeof(IComponent).IsAssignableFrom(componentType))
+			if (components.Find(o => o.componentType == componentType) != null)
 			{
-				if (components.Find(o => o.componentType == componentType) != null)
-				{
-					return components.Find(o => o.componentType == componentType).entityComponents.Where(o => o.component.Enabled && SceneManager.SceneExists(entities.Find(x => x.EntityID == o.entityID).SceneName)).ToList();
-				}
+				return components.Find(o => o.componentType == componentType).entityComponents.Where(o => o.component.Enabled && SceneManager.SceneExists(entities.Find(x => x.EntityID == o.entityID).SceneName)).ToList();
 			}
 
 			return new List<EntityComponent>();
-		}
+        }
 
-		/// <summary>
-		/// Gets all of the entity components with a component type.
-		/// </summary>
-		/// <param name="componentType">The component type to search for.</param>
-		/// <returns>List of objects found.</returns>
-		public static List<EntityComponent> GetComponentEntityList(Type componentType)
+        public static List<EntityComponent> GetComponentEntityList<T>() where T : IComponent
+        {
+            return GetComponentEntityList(typeof(T));
+        }
+
+        /// <summary>
+        /// Gets all of the entity components with a component type.
+        /// </summary>
+        /// <param name="componentType">The component type to search for.</param>
+        /// <returns>List of objects found.</returns>
+        internal static List<EntityComponent> GetComponentEntityList(Type componentType)
 		{
-			if (typeof(IComponent).IsAssignableFrom(componentType))
+			if (components.Find(o => o.componentType == componentType) != null)
 			{
-				if (components.Find(o => o.componentType == componentType) != null)
-				{
-					return components.Find(o => o.componentType == componentType).entityComponents;
-				}
+				return components.Find(o => o.componentType == componentType).entityComponents;
 			}
 
 			return new List<EntityComponent>();
@@ -317,12 +335,17 @@ namespace Tynted
 			}
 		}
 
-		/// <summary>
-		/// Removes a component from an entity.
-		/// </summary>
-		/// <param name="entityName">The name of the entity to remove a component from.</param>
-		/// <param name="componentType">The type of component to remove.</param>
-		public static void RemoveEntityComponent(string entityName, Type componentType)
+        public static void RemoveEntityComponent<T>(string entityName) where T : IComponent
+        {
+            RemoveEntityComponent(entityName, typeof(T));
+        }
+
+        /// <summary>
+        /// Removes a component from an entity.
+        /// </summary>
+        /// <param name="entityName">The name of the entity to remove a component from.</param>
+        /// <param name="componentType">The type of component to remove.</param>
+        internal static void RemoveEntityComponent(string entityName, Type componentType)
 		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
@@ -338,14 +361,19 @@ namespace Tynted
 					}
 				}
 			}
-		}
+        }
 
-		/// <summary>
-		/// Removes a component from a specified entity.
-		/// </summary>
-		/// <param name="entityID">The ID of the entity.</param>
-		/// <param name="componentType">The type of component to remove.</param>
-		internal static void RemoveEntityComponent(int entityID, Type componentType)
+        internal static void RemoveEntityComponent<T>(int entityID) where T : IComponent
+        {
+            RemoveEntityComponent(entityID, typeof(T));
+        }
+
+        /// <summary>
+        /// Removes a component from a specified entity.
+        /// </summary>
+        /// <param name="entityID">The ID of the entity.</param>
+        /// <param name="componentType">The type of component to remove.</param>
+        internal static void RemoveEntityComponent(int entityID, Type componentType)
 		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
@@ -371,13 +399,18 @@ namespace Tynted
 			}
 		}
 
+        public static IComponent GetEntityComponent<T>(string entityName) where T : IComponent
+        {
+            return GetEntityComponent(entityName, typeof(T));
+        }
+
 		/// <summary>
 		/// Gets a component instance from an entity based on a component type.
 		/// </summary>
 		/// <param name="entityName">The name of the entity.</param>
 		/// <param name="componentType">The type of component to grab.</param>
 		/// <returns>The component if found, otherwise null.</returns>
-		public static IComponent GetEntityComponent(string entityName, Type componentType)
+		internal static IComponent GetEntityComponent(string entityName, Type componentType)
 		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
@@ -395,15 +428,20 @@ namespace Tynted
 			}
 
 			return null;
-		}
+        }
 
-		/// <summary>
-		/// Gets a component instance from an entity based on a component type.
-		/// </summary>
-		/// <param name="entityID">ID of the entity.</param>
-		/// <param name="componentType">The type of component to get.</param>
-		/// <returns>The component if found, otherwise null.</returns>
-		internal static IComponent GetEntityComponent(int entityID, Type componentType)
+        internal static IComponent GetEntityComponent<T>(int entityID) where T : IComponent
+        {
+            return GetEntityComponent(entityID, typeof(T));
+        }
+
+        /// <summary>
+        /// Gets a component instance from an entity based on a component type.
+        /// </summary>
+        /// <param name="entityID">ID of the entity.</param>
+        /// <param name="componentType">The type of component to get.</param>
+        /// <returns>The component if found, otherwise null.</returns>
+        internal static IComponent GetEntityComponent(int entityID, Type componentType)
 		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
@@ -484,7 +522,7 @@ namespace Tynted
 					EntityData eData = entities.Find(o => o.Name == entityName && o.EntityID == components[i].entityComponents[j].entityID);
 
 					//make sure entity exists
-					if (!eData.Equals(default(EntityData)))
+					if (!eData.Equals(default))
 					{
 						RemoveEntityComponent(components[i].entityComponents[j].entityID, components[i].entityComponents[j].component.GetType());
 					}

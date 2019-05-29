@@ -66,6 +66,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameOptions.cs" />
     <Compile Include="GameTime.cs" />
+    <Compile Include="IO\AudioManager.cs" />
     <Compile Include="IO\FileManager.cs" />
     <Compile Include="IO\InputManager.cs" />
     <Compile Include="IO\JsonManager.cs" />
