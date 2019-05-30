@@ -464,20 +464,20 @@ namespace Tynted
 		/// </summary>
 		/// <param name="entityName">The name of the entity.</param>
 		/// <param name="component">The component to become.</param>
-		public static void SetEntityComponent(string entityName, IComponent component)
-		{
-			//make sure component exists
-			if (components.Find(o => o.componentType == component.GetType()) != null)
-			{
-				EntityData eData = entities.Find(o => o.Name == entityName);
+		//public static void SetEntityComponent(string entityName, IComponent component)
+		//{
+		//	//make sure component exists
+		//	if (components.Find(o => o.componentType == component.GetType()) != null)
+		//	{
+		//		EntityData eData = entities.Find(o => o.Name == entityName);
 
-				//make sure entity exists
-				if (!eData.Equals(default(EntityData)))
-				{
-					SetEntityComponent(eData.EntityID, component);
-				}
-			}
-		}
+		//		//make sure entity exists
+		//		if (!eData.Equals(default(EntityData)))
+		//		{
+		//			SetEntityComponent(eData.EntityID, component);
+		//		}
+		//	}
+		//}
 
 		/// <summary>
 		/// Sets the component to a new component value.

@@ -19,22 +19,18 @@ namespace Tynted.IO
         /// <param name="audioName">Name of the audio.</param>
         /// <param name="shortTime">Set to true if you would like to hold it on ram, otherwise it streams from the file.</param>
         /// <param name="loop">Whether to loop or not.</param>
-        public static void LoadAudio(string filePath, string audioName, bool shortTime, bool loop = false)
+        public static void LoadAudio(string filePath, string audioName, bool shortTime)
         {
             try
             {
                 if (shortTime)
                 {
                     Sound s = new Sound(new SoundBuffer(filePath));
-                    s.Loop = true;
-                    s.Play();
                     sounds.Add(audioName, s);
                 }
                 else
                 {
                     Music m = new Music(filePath);
-                    m.Loop = true;
-                    m.Play();
                     music.Add(audioName, m);
                 }
             }

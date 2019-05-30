@@ -63,18 +63,18 @@ namespace Tynted
         //IMPORTANT!!!!! Fix any discrepancies within Scene to make sure
         //               the template entities in scene json files are 
         //               updated properly.
-        public static void CreateEmpty(string name, string tag, string scene)
+        public static void CreateEmpty(string name, string tag = "Default", string scene = "")
         {
             ECSManager.CreateEntity(name, tag, scene);
         }
 
-        public static void CreateTransform(string name, string tag, string scene)
+        public static void CreateTransform(string name, string tag = "Default", string scene = "")
         {
             ECSManager.CreateEntity(name, tag, scene);
             ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0)));
         }
 
-        public static void CreateSprite(string name, string tag, string scene, Texture texture)
+        public static void CreateSprite(string name, Texture texture, string tag = "Default", string scene = "")
         {
             ECSManager.CreateEntity(name, tag, scene);
             ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0)));

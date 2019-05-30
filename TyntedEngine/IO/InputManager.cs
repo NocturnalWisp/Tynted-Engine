@@ -31,7 +31,7 @@ namespace Tynted.IO
 			Joystick.Update();
 		}
 
-		public static void JustPressedReset()
+		internal static void JustPressedReset()
 		{
 			for (int bindingIndex = 0; bindingIndex < bindings.Count; bindingIndex++)
 			{
@@ -48,6 +48,11 @@ namespace Tynted.IO
 				bindings.Add(binding);
 			}
 		}
+
+        public static void RemoveBinding(string name)
+        {
+            bindings.RemoveAll(o => o.Name == name);
+        }
 
 		public static KeyBinding GetBinding(string name)
 		{
