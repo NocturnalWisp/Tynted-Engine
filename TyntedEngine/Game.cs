@@ -12,9 +12,6 @@ namespace Tynted
 	{
 		RenderWindow window;
 
-		private Time elapsedTime;
-		public Time ElapsedTime { get => elapsedTime; }
-
 		GameOptions gameOptions;
 		GameTime gameTime;
 
