@@ -30,7 +30,7 @@ namespace Tynted
 		/// </summary>
 		/// <param name="componentType">The type of component to grab.</param>
 		/// <returns>The component if found, otherwise null.</returns>
-		public IComponent GetComponent(Type componentType)
+		internal IComponent GetComponent(Type componentType)
 		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
