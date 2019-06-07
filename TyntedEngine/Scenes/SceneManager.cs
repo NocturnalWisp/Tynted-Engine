@@ -38,6 +38,7 @@ namespace Tynted
 				return;
 
 			currentScenes.Add(newScene);
+            newScene.Initialize();
 		}
 
 		public static void UnloadScene(string sceneName)
@@ -113,14 +114,6 @@ namespace Tynted
             else
                 return null;
         }
-
-		internal static void Initialize()
-		{
-			foreach (Scene scene in currentScenes)
-			{
-				scene.Initialize();
-			}
-		}
 
 		internal static void Update(GameTime gameTime)
 		{

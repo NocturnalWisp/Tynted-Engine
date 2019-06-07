@@ -5,6 +5,7 @@ using Tynted.SFML.Window;
 
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Tynted
 {
@@ -14,6 +15,8 @@ namespace Tynted
 
 		GameOptions gameOptions;
 		GameTime gameTime;
+
+        private List<GameExtension> extensions = new List<GameExtension>();
 
 		public Game(GameOptions options)
 		{
@@ -101,10 +104,23 @@ namespace Tynted
 		/// </summary>
 		protected virtual void Initialize()
         {
+            foreach(GameExtension extension in extensions)
+            {
+                extension.Intitialize();
+
+                foreach (Type systemType in extension.systems)
+                {
+                    ECSManager.AddSystem(systemType);
+                }
+
+                foreach (Type componentType in extension.components)
+                {
+                    ECSManager.AddComponent(componentType);
+                }
+            }
+
             InputManager.Initialize(window);
             ECSManager.Initialize();
-            Console.WriteLine("Initializing Scenes...");
-            SceneManager.Initialize();
         }
 
 		/// <summary>
@@ -135,8 +151,20 @@ namespace Tynted
             SceneManager.OnClosed();
         }
 
-		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+        #region Game Extensions
+        protected void LoadExtension<T>() where T : GameExtension
+        {
+            if (!extensions.Exists(o => o.GetType() == typeof(T)))
+            {
+                ConstructorInfo ctor = typeof(T).GetConstructor(new Type[]{ });
+                GameExtension instance = (GameExtension) ctor.Invoke(new object[0]);
+                extensions.Add(instance);
+            }
+        }
+        #endregion
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
 		{
