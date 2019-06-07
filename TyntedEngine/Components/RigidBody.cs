@@ -10,7 +10,7 @@ using Box2DNet.Dynamics;
 
 namespace Tynted.Components
 {
-	public struct RigidBody : IComponent
+	public class RigidBody : IComponent
 	{
 		public bool Enabled { get; set; }
 

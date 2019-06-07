@@ -43,13 +43,12 @@ namespace Tynted.Systems
 		{
 			var allTypes = GetEntities();
 
-            world.Step(gameTime.elapsedTime.AsSeconds(), 8, 3);
+            world.Step(gameTime.ElapsedTime.AsSeconds(), 8, 3);
 
 			foreach (Entity entity in allTypes)
 			{
 				Transform transform = entity.GetComponent<Transform>();
 				transform.LocalPosition = entity.GetComponent<RigidBody>().body.GetPosition();
-				entity.SetComponent(transform);
 			}
 
 			base.Update(gameTime);

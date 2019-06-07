@@ -54,11 +54,6 @@ namespace Tynted
 				return default;
 		}
 
-		public void SetComponent(IComponent component)
-		{
-			components[components.FindIndex(o => o.GetType() == component.GetType())] = component;
-		}
-
         #region Entity Templates
         //IMPORTANT!!!!! Fix any discrepancies within Scene to make sure
         //               the template entities in scene json files are 
@@ -98,7 +93,7 @@ namespace Tynted
             }
         }
 
-        public static void CloneEntity(int entityID)
+        internal static void CloneEntity(int entityID)
         {
             EntityData data = ECSManager.entities.Find(o => o.EntityID == entityID);
 

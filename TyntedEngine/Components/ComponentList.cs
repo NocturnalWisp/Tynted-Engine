@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Tynted
 {
-	public class Component
+	public class ComponentList
 	{
 		public Type componentType;
 		public  List<EntityComponent> entityComponents = new List<EntityComponent>();
 
-		public Component(Type componentType)
+		public ComponentList(Type componentType)
 		{
 			if (typeof(IComponent).IsAssignableFrom(componentType))
 			{
@@ -28,26 +28,4 @@ namespace Tynted
 			}
 		}
 	}
-
-	public struct EntityComponent
-	{
-		internal int entityID;
-		internal IComponent component;
-
-		public EntityComponent(int entityID, IComponent component)
-		{
-			this.entityID = entityID;
-			this.component = component;
-		}
-
-        public static bool operator ==(EntityComponent a, EntityComponent b)
-        {
-            return (a.entityID == b.entityID) && (a.component == b.component);
-        }
-
-        public static bool operator !=(EntityComponent a, EntityComponent b)
-        {
-            return (a.entityID != b.entityID) || (a.component != b.component);
-        }
-    }
 }

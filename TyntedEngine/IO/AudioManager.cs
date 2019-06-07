@@ -36,7 +36,7 @@ namespace Tynted.IO
             }
             catch (Exception e)
             {
-                Console.WriteLine("Could not play audio " + filePath + " because " + e.ToString());
+                Console.WriteLine("Could not load audio " + filePath + " because " + e.ToString());
             }
         }
 
@@ -95,7 +95,7 @@ namespace Tynted.IO
             }
             else
             {
-                Console.WriteLine("The audio you selected to stop does not exist.");
+                Console.WriteLine("The audio you selected does not exist.");
             }
         }
 
@@ -115,7 +115,7 @@ namespace Tynted.IO
             }
             else
             {
-                Console.WriteLine("The audio you selected to stop does not exist.");
+                Console.WriteLine("The audio you selected does not exist.");
                 return 0;
             }
         }

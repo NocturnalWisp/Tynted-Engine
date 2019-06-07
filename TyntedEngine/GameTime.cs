@@ -11,7 +11,7 @@ namespace Tynted
 {
 	public struct GameTime
 	{
-		public Time elapsedTime;
-		public Time totalTime;
+		public Time ElapsedTime { get; set; }
+		public Time TotalTime { get; set; }
 	}
 }

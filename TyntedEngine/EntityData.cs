@@ -13,7 +13,7 @@ namespace Tynted
 		public string Tag { get; set; }
 		public string SceneName { get; set; }
 
-		public EntityData(int entityID, string name, string sceneName, string tag)
+		internal EntityData(int entityID, string name, string sceneName, string tag)
 		{
 			EntityID = entityID;
 			Name = name;

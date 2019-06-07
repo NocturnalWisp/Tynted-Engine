@@ -11,7 +11,7 @@ using Tynted.SFML.Graphics;
 
 namespace Tynted
 {
-	public class System
+	public abstract class System
 	{
 		//These both allow for the system to control a list of entities 
 		//that can be dynamically altered based on the ECSManager list, 
@@ -24,8 +24,6 @@ namespace Tynted
 		internal string[] tags;
 		internal bool sceneSpecific = false;
 		internal string[] scenes;
-
-		public System() { }
 
 		public virtual void Initialize() { }
 

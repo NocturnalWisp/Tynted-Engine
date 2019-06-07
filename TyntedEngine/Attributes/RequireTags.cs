@@ -12,11 +12,11 @@ namespace Tynted
 	[AttributeUsage(AttributeTargets.Class)]
 	public class RequireTags : Attribute
 	{
-		public string[] tag;
+		public string[] tags;
 
 		public RequireTags(params string[] tags)
 		{
-			this.tag = tags;
+			this.tags = tags;
 		}
 	}
 }

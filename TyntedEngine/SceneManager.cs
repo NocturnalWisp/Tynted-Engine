@@ -11,6 +11,17 @@ namespace Tynted
 	{
 		private static List<Scene> currentScenes = new List<Scene>();
 
+        /// <summary>
+        /// Loads the main static scene for overall usage.
+        /// </summary>
+        internal static void LoadStaticScene()
+        {
+            Scene newScene = new Scene("");
+
+            currentScenes.Add(newScene);
+            newScene.Initialize();
+        }
+
 		public static void LoadScene(Scene newScene)
 		{
 			if (SceneExists(newScene.SceneName))
@@ -50,25 +61,19 @@ namespace Tynted
 			currentScenes.Remove(scene);
 		}
 
-		public static void UnloadAllScenes(bool closing = false)
+		public static void UnloadAllScenes()
 		{
-			OnClosed();
-
-			if (closing)
-			{
-				currentScenes.Clear();
-			}
-			else
-			{
-				currentScenes.RemoveAll(o => o.SceneName != "");
-			}
+            currentScenes.RemoveAll(o => o.SceneName != "");
         }
 
         public static void PauseScene(string sceneName)
         {
-            foreach (Scene scene in currentScenes.Where(o => !o.paused && o.SceneName.Equals(sceneName)))
+            if (sceneName != "")
             {
-                scene.paused = true;
+                foreach (Scene scene in currentScenes.Where(o => !o.paused && o.SceneName.Equals(sceneName)))
+                {
+                    scene.paused = true;
+                }
             }
         }
 
@@ -79,9 +84,12 @@ namespace Tynted
 
         public static void ResumeScene(string sceneName)
         {
-            foreach (Scene scene in currentScenes.Where(o => !o.paused && o.SceneName.Equals(sceneName)))
+            if (sceneName != "")
             {
-                scene.paused = false;
+                foreach (Scene scene in currentScenes.Where(o => !o.paused && o.SceneName.Equals(sceneName)))
+                {
+                    scene.paused = false;
+                }
             }
         }
 
@@ -92,12 +100,18 @@ namespace Tynted
 
         public static bool SceneExists(string sceneName)
 		{
-			return currentScenes.Exists(o => o.SceneName == sceneName);
+            if (sceneName != "")
+                return currentScenes.Exists(o => o.SceneName == sceneName);
+            else
+                return false;
 		}
 
         public static Scene GetSceneByName(string sceneName)
         {
-            return currentScenes.Find(o => o.SceneName.Equals(sceneName));
+            if (sceneName != "")
+                return currentScenes.Find(o => o.SceneName.Equals(sceneName));
+            else
+                return null;
         }
 
 		internal static void Initialize()
@@ -124,12 +138,14 @@ namespace Tynted
 			}
 		}
 
-		private static void OnClosed()
+		internal static void OnClosed()
 		{
 			foreach (Scene scene in currentScenes)
 			{
 				scene.OnClosed();
 			}
+
+            currentScenes.Clear();
 		}
 	}
 }

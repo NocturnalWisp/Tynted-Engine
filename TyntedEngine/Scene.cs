@@ -24,171 +24,169 @@ namespace Tynted
         internal List<Entity> initalEntities;
         internal List<Entity> entities;
 
-		public Scene(string scene, bool isPath, Dictionary<string, object> variables)
+        public Scene(string scene)
+        {
+            this.sceneName = scene;
+        }
+
+		public Scene(string path, Dictionary<string, object> variables)
 		{
-            if (!isPath)
+            #region Setup Scene From File
+            //Do all the json work
+            try
             {
-                sceneName = scene;
-            }
-            else
-            {
-                #region Setup Scene From File
-                //Do all the json work
-                try
+                JObject sceneJson = JsonManager.LoadFile(path);
+
+                double version = sceneJson.Value<double>("version");
+
+                //Work with various versions for backwards compatability.
+                if (version >= 0.1)
                 {
-                    JObject sceneJson = JsonManager.LoadFile(scene);
+                    sceneName = sceneJson.Value<string>("name");
 
-                    double version = sceneJson.Value<double>("version");
+                    JArray entities = sceneJson.Value<JArray>("entities");
 
-                    //Work with various versions for backwards compatability.
-                    if (version >= 0.1)
+                    foreach (JObject entity in entities)
                     {
-                        sceneName = sceneJson.Value<string>("name");
+                        string entityName = entity.Value<string>("name");
+                        string tag = entity.Value<string>("tag");
 
-                        JArray entities = sceneJson.Value<JArray>("entities");
-
-                        foreach (JObject entity in entities)
+                        //Clone
+                        if (entity.GetValue("clone") != null)
                         {
-                            string entityName = entity.Value<string>("name");
-                            string tag = entity.Value<string>("tag");
+                            Entity.CloneEntity(entity.Value<string>("clone"), entityName, tag, sceneName);
+                        }
+                        else if (entity.GetValue("template") != null)
+                        {
+                            //TODO: Make it generalized so any templates will work off the bat.
+                            JObject templateObject = entity.Value<JObject>("template");
 
-                            //Clone
-                            if (entity.GetValue("clone") != null)
+                            string templateName = templateObject.Value<string>("name");
+                            object[] args = templateObject.Value<JArray>("args").ToObject<object[]>();
+
+                            //IMPORTANT!!!! Update here if any templates change in the entity class.
+                            switch (templateName.ToLower())
                             {
-                                Entity.CloneEntity(entity.Value<string>("clone"), entityName, tag, sceneName);
-                            }
-                            else if (entity.GetValue("template") != null)
-                            {
-                                //TODO: Make it generalized so any templates will work off the bat.
-                                JObject templateObject = entity.Value<JObject>("template");
+                                case "empty":
+                                    {
+                                        Entity.CreateEmpty(entityName, tag, sceneName);
+                                        break;
+                                    }
+                                case "transform":
+                                    {
+                                        Entity.CreateTransform(entityName, tag, sceneName);
+                                        break;
+                                    }
+                                case "sprite":
+                                    {
+                                        if (args.Length > 0)
+                                        {
+                                            string textureArgument = ((string)args[0]).Substring(1, ((string)args[0]).Length - 1);
 
-                                string templateName = templateObject.Value<string>("name");
-                                object[] args = templateObject.Value<JArray>("args").ToObject<object[]>();
-
-                                //IMPORTANT!!!! Update here if any templates change in the entity class.
-                                switch (templateName.ToLower())
-                                {
-                                    case "empty":
-                                        {
-                                            Entity.CreateEmpty(entityName, tag, sceneName);
-                                            break;
-                                        }
-                                    case "transform":
-                                        {
-                                            Entity.CreateTransform(entityName, tag, sceneName);
-                                            break;
-                                        }
-                                    case "sprite":
-                                        {
-                                            if (args.Length > 0)
+                                            if (variables.ContainsKey(textureArgument))
                                             {
-                                                string textureArgument = ((string)args[0]).Substring(1, ((string)args[0]).Length - 1);
-
-                                                if (variables.ContainsKey(textureArgument))
+                                                if (variables[textureArgument].GetType().Equals(typeof(Texture)))
                                                 {
-                                                    if (variables[textureArgument].GetType().Equals(typeof(Texture)))
-                                                    {
-                                                        Entity.CreateSprite(entityName, tag, sceneName, (Texture)variables[textureArgument]);
-                                                    }
-                                                    else
-                                                    {
-                                                        throw new Exception("The variable " + variables[textureArgument] + " is not of type Texture.");
-                                                    }
+                                                    Entity.CreateSprite(entityName, (Texture)variables[textureArgument], tag, sceneName);
                                                 }
                                                 else
                                                 {
-                                                    throw new Exception("The variable " + textureArgument + " does not exist.");
+                                                    throw new Exception("The variable " + variables[textureArgument] + " is not of type Texture.");
                                                 }
                                             }
                                             else
                                             {
-                                                throw new Exception("The arguments list is too short for creating a new sprite with template \"Sprite.\"");
+                                                throw new Exception("The variable " + textureArgument + " does not exist.");
                                             }
-                                            break;
                                         }
-                                }
+                                        else
+                                        {
+                                            throw new Exception("The arguments list is too short for creating a new sprite with template \"Sprite.\"");
+                                        }
+                                        break;
+                                    }
                             }
-                            else if (entity.GetValue("components") != null)
+                        }
+                        else if (entity.GetValue("components") != null)
+                        {
+                            int? entityID = ECSManager.CreateEntity(entityName, tag, sceneName);
+
+                            if (entityID != null)
                             {
-                                int? entityID = ECSManager.CreateEntity(entityName, tag, sceneName);
-
-                                if (entityID != null)
+                                foreach (var jsonComponent in entity.Value<JObject>("components"))
                                 {
-                                    foreach (var jsonComponent in entity.Value<JObject>("components"))
+                                    try
                                     {
-                                        try
+                                        Type[] componentTypes = GetTypesByName(jsonComponent.Key);
+                                        Type componentType = null;
+
+                                        foreach (Type t in componentTypes)
                                         {
-                                            Type[] componentTypes = GetTypesByName(jsonComponent.Key);
-                                            Type componentType = null;
-
-                                            foreach (Type t in componentTypes)
+                                            if (t.Namespace.Equals("Tynted.Components"))
                                             {
-                                                if (t.Namespace.Equals("Tynted.Components"))
-                                                {
-                                                    componentType = t;
-                                                }
-                                            }
-
-                                            if (componentType == null)
-                                            {
-                                                componentType = componentTypes[0];
-                                            }
-
-                                            object[] args = jsonComponent.Value.Value<JArray>().ToObject<object[]>();
-
-                                            for (int i = 0; i < args.Length; i++)
-                                            {
-                                                if (args[i].GetType().Equals(typeof(string)))
-                                                {
-                                                    if (((string)args[i]).StartsWith("@"))
-                                                    {
-                                                        string variableName = ((string)args[i]).Substring(1, ((string)args[i]).Length - 1);
-                                                        args[i] = variables[variableName];
-                                                    }
-                                                }
-                                            }
-
-                                            List<Type> types = new List<Type>();
-
-                                            foreach (object obj in args)
-                                            {
-                                                types.Add(obj.GetType());
-                                            }
-
-                                            ConstructorInfo ctor = componentType.GetConstructor(types.ToArray());
-                                            
-                                            if (ctor != null)
-                                            {
-                                                IComponent newComponent = (IComponent)ctor.Invoke(args);
-
-                                                ECSManager.AddEntityComponent((int)entityID, newComponent);
-                                            }
-                                            else
-                                            {
-                                                throw new Exception("Could not create a " + componentType + " component with the arguments " + args.ToString() + ".");
+                                                componentType = t;
                                             }
                                         }
-                                        catch (Exception e)
+
+                                        if (componentType == null)
                                         {
-                                            Console.WriteLine("Could not create entity with component " + jsonComponent.Key + ". Error: " + e.ToString());
-                                            ECSManager.DeleteEntity(entityName, tag, sceneName);
+                                            componentType = componentTypes[0];
+                                        }
+
+                                        object[] args = jsonComponent.Value.Value<JArray>().ToObject<object[]>();
+
+                                        for (int i = 0; i < args.Length; i++)
+                                        {
+                                            if (args[i].GetType().Equals(typeof(string)))
+                                            {
+                                                if (((string)args[i]).StartsWith("@"))
+                                                {
+                                                    string variableName = ((string)args[i]).Substring(1, ((string)args[i]).Length - 1);
+                                                    args[i] = variables[variableName];
+                                                }
+                                            }
+                                        }
+
+                                        List<Type> types = new List<Type>();
+
+                                        foreach (object obj in args)
+                                        {
+                                            types.Add(obj.GetType());
+                                        }
+
+                                        ConstructorInfo ctor = componentType.GetConstructor(types.ToArray());
+                                            
+                                        if (ctor != null)
+                                        {
+                                            IComponent newComponent = (IComponent)ctor.Invoke(args);
+
+                                            ECSManager.AddEntityComponent((int)entityID, newComponent);
+                                        }
+                                        else
+                                        {
+                                            throw new Exception("Could not create a " + componentType + " component with the arguments " + args.ToString() + ".");
                                         }
                                     }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Could not create entity with component " + jsonComponent.Key + ". Error: " + e.ToString());
+                                        ECSManager.DeleteEntity(entityName, tag, sceneName);
+                                    }
                                 }
-                                else
-                                {
-                                    throw new Exception("An entity by that name already exists, could not create a new one.");
-                                }
+                            }
+                            else
+                            {
+                                throw new Exception("An entity by that name already exists, could not create a new one.");
                             }
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Could not extract the json for scene " + scene + " because " + e);
-                }
-                #endregion
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not extract the json for scene " + path + " because " + e);
+            }
+            #endregion
         }
 
         private static Type[] GetTypesByName(string className)

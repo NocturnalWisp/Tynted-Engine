@@ -41,10 +41,9 @@ namespace Tynted
 
 			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
 
-            Scene emptyScene = new Scene("", false, null);
-			SceneManager.LoadScene(emptyScene);
+			SceneManager.LoadStaticScene();
 
-			if (gameOptions.forceLimit)
+			if (gameOptions.ForceLimit)
 			{
 				window.SetFramerateLimit(60);
 			}
@@ -61,7 +60,6 @@ namespace Tynted
 		/// <param name="e"></param>
 		private void WindowClosed(object sender, EventArgs e)
 		{
-			SceneManager.UnloadAllScenes(true);
 			OnClosed();
 
 			window.Close();
@@ -82,8 +80,8 @@ namespace Tynted
 				window.DispatchEvents();
 
 				//Time stamps
-				gameTime.elapsedTime = deltaClock.Restart();
-				gameTime.totalTime = totalTime.ElapsedTime;
+				gameTime.ElapsedTime = deltaClock.Restart();
+				gameTime.TotalTime = totalTime.ElapsedTime;
 
 				Update(gameTime);
 
@@ -133,9 +131,9 @@ namespace Tynted
 		/// Callback when the game window is closed.
 		/// </summary>
 		protected virtual void OnClosed()
-		{
-
-		}
+        {
+            SceneManager.OnClosed();
+        }
 
 		#region IDisposable Support
 		private bool disposedValue = false; // To detect redundant calls

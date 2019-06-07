@@ -10,20 +10,20 @@ namespace Tynted
 	{
 		private static readonly GameOptions def = new GameOptions(false);
 
-		public bool forceLimit;
+		public bool ForceLimit { get; set; }
 
 		//Properties
 		public static GameOptions Default
 		{
 			get
 			{
-				return def;
+                return def;
 			}
 		}
 
 		public GameOptions(bool forceLimit = false)
 		{
-			this.forceLimit = forceLimit;
+			this.ForceLimit = forceLimit;
 		}
 	}
 }

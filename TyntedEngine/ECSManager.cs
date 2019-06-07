@@ -16,7 +16,7 @@ namespace Tynted
 
 		static List<System> systems = new List<System>();
 
-		static List<Component> components = new List<Component>();
+		static List<ComponentList> components = new List<ComponentList>();
 
 		static Dictionary<string, TyntedEvent> events = new Dictionary<string, TyntedEvent>();
 		static Dictionary<string, TyntedEvent<object>> events1 = new Dictionary<string, TyntedEvent<object>>();
@@ -96,7 +96,7 @@ namespace Tynted
 					if (attribute.GetType() == typeof(RequireTags))
 					{
 						system.tagSpecific = true;
-						system.tags = ((RequireTags)attribute).tag;
+						system.tags = ((RequireTags)attribute).tags;
 						tagAttributeUsed = true;
 					}
 
@@ -136,7 +136,7 @@ namespace Tynted
 		/// Gets all of the components in the components list.
 		/// </summary>
 		/// <returns>List of components.</returns>
-		internal static List<Component> GetComponents()
+		internal static List<ComponentList> GetComponents()
 		{
 			return components.ToList();
 		}
@@ -155,7 +155,7 @@ namespace Tynted
 			//Make sure component doesn't already exist
 			if (components.Find(o => o.componentType == componentType) == null)
 			{
-				components.Add(new Component(componentType));
+				components.Add(new ComponentList(componentType));
 				Console.WriteLine("Added component: " + componentType);
 			}
 		}
@@ -175,7 +175,16 @@ namespace Tynted
 			{
 				if (components.Find(o => o.componentType == componentType) != null)
 				{
-					components.Remove(components.Find(o => o.componentType == componentType));
+                    ComponentList component = components.Find(o => o.componentType == componentType);
+                    //Make sure a system does not use this component
+                    if (!systems.Exists(o => o.types.ToList().Contains(component.GetType())))
+                    {
+                        //Make sure there are no entities with that component
+                        if (component.entityComponents.Count <= 0)
+                        {
+                            components.Remove(component);
+                        }
+                    }
 				}
 			}
 		}
@@ -315,7 +324,7 @@ namespace Tynted
 		/// Adds a list of entity components in batch.
 		/// </summary>
 		/// <param name="entityComponents">The entity component list to add.</param>
-		public static void RegisterEntityComponents(List<EntityComponentIdentifier> entityComponents)
+		public static void RegisterEntityComponents(params EntityComponentIdentifier[] entityComponents)
 		{
 			foreach (EntityComponentIdentifier entityComponent in entityComponents)
 			{
@@ -609,7 +618,7 @@ namespace Tynted
         {
             List<Entity> entityList = new List<Entity>();
 
-            foreach (Component component in components)
+            foreach (ComponentList component in components)
             {
                 foreach (EntityComponent entityComponent in component.entityComponents)
                 {

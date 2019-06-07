@@ -9,7 +9,7 @@ using Tynted.SFML.Graphics;
 
 namespace Tynted.Components
 {
-	public struct SpriteRenderee : IComponent
+	public class SpriteRenderee : IComponent
 	{
 		public bool Enabled { get; set; }
 

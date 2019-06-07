@@ -27,8 +27,6 @@ namespace Tynted.Systems
 				sr.sprite.Scale = t.LocalScale;
 
 				window.Draw(sr.sprite);
-
-				entity.SetComponent(sr);
             }
 
 			base.Draw(window);
