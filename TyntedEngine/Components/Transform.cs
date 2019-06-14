@@ -63,6 +63,22 @@ namespace Tynted.Components
 			Enabled = true;
 		}
 
+		public Transform(Vec2 position, float rotation = 0, Vec2 scale = default, Transform parent = null)
+		{
+			this.parent = parent;
+			children = new List<Transform>();
+
+			this.LocalPosition = position;
+			this.LocalRotation = rotation;
+
+			if (scale == default)
+				this.LocalScale = Vec2.One;
+			else
+				this.LocalScale = scale;
+
+			Enabled = true;
+		}
+
 		private void SetDirty()
 		{
 			if (!isDirty)
