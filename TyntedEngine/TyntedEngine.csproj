@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="Attributes\GetComponents.cs" />
     <Compile Include="Attributes\RequireScenes.cs" />
-    <Compile Include="Attributes\RequireTags - Copy.cs" />
+    <Compile Include="Attributes\RequireTags.cs" />
     <Compile Include="Attributes\Manager.cs" />
     <Compile Include="Components\ComponentList.cs" />
     <Compile Include="Components\EntityComponent.cs" />
