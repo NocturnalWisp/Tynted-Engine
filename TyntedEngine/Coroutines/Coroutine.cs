@@ -15,13 +15,20 @@ namespace Tynted
 		static List<IEnumerator> shouldRunAtEndOfFrame = new List<IEnumerator>();
 		static List<Tuple<float, IEnumerator>> shouldRunAfterTimes = new List<Tuple<float, IEnumerator>>();
 
-		public static IEnumerator StartCoroutine(IEnumerator c)
+		/// <summary>
+		/// Runs a coroutine.
+		/// </summary>
+		/// <param name="c">The coroutine method to run.</param>
+		/// <returns></returns>
+		public static void StartCoroutine(IEnumerator c)
 		{
 			unblockedCoroutines.Add(c);
-
-			return c;
 		}
 
+		/// <summary>
+		/// Stops a running coroutine.
+		/// </summary>
+		/// <param name="c">The coroutine to stop.</param>
 		public static void StopCoroutine(IEnumerator c)
 		{
 			if (unblockedCoroutines.Contains(c))
@@ -39,7 +46,7 @@ namespace Tynted
 			}
 		}
 
-		public static void Update(GameTime gameTime)
+		internal static void Update(GameTime gameTime)
 		{
 			//do the wait for seconds
             foreach (Tuple<float, IEnumerator> timeRun in shouldRunAfterTimes.ToList())
@@ -91,7 +98,7 @@ namespace Tynted
 			shouldRunNextFrame.Clear();
 		}
 
-		public static void EndFrame()
+		internal static void EndFrame()
 		{
 			foreach (IEnumerator coroutine in shouldRunAtEndOfFrame.ToList())
 			{
