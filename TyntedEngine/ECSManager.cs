@@ -21,6 +21,8 @@ namespace Tynted
 		static Dictionary<string, TyntedEvent> events = new Dictionary<string, TyntedEvent>();
 		static Dictionary<string, TyntedEvent<object>> events1 = new Dictionary<string, TyntedEvent<object>>();
 		static Dictionary<string, TyntedEvent<object, object>> events2 = new Dictionary<string, TyntedEvent<object, object>>();
+		static Dictionary<string, TyntedEvent<object, object, object>> events3 = new Dictionary<string, TyntedEvent<object, object, object>>();
+		static Dictionary<string, TyntedEvent<object, object, object, object>> events4 = new Dictionary<string, TyntedEvent<object, object, object, object>>();
 
 		/// <summary>
 		/// Initializer for each system.
@@ -754,6 +756,42 @@ namespace Tynted
 
 			return ev;
 		}
+
+		/// <summary>
+		/// Creates a new event with 3 parameters.
+		/// </summary>
+		/// <param name="name">The name identifier of the event.</param>
+		/// <returns>The created event, or null if already created.</returns>
+		public static TyntedEvent<object, object, object> CreateEvent3Arg(string name)
+		{
+			TyntedEvent<object, object, object> ev = null;
+
+			if (!events3.ContainsKey(name))
+			{
+				ev = new TyntedEvent<object, object, object>();
+				events3[name] = ev;
+			}
+
+			return ev;
+		}
+
+		/// <summary>
+		/// Creates a new event with 4 parameters.
+		/// </summary>
+		/// <param name="name">The name identifier of the event.</param>
+		/// <returns>The created event, or null if already created.</returns>
+		public static TyntedEvent<object, object, object, object> CreateEvent4Arg(string name)
+		{
+			TyntedEvent<object, object, object, object> ev = null;
+
+			if (!events3.ContainsKey(name))
+			{
+				ev = new TyntedEvent<object, object, object, object>();
+				events4[name] = ev;
+			}
+
+			return ev;
+		}
 		#endregion
 
 		#region Subscribe Events
@@ -795,6 +833,32 @@ namespace Tynted
 				events2[name].AddListener(action);
 			}
 		}
+
+		/// <summary>
+		/// Subscribes an engine action to an event.
+		/// </summary>
+		/// <param name="name">The name identifier of the event.</param>
+		/// <param name="action">The action that occurs when the event is invoked.</param>
+		public static void SubscribeEvent(string name, EngineAction<object, object, object> action)
+		{
+			if (events3.ContainsKey(name))
+			{
+				events3[name].AddListener(action);
+			}
+		}
+
+		/// <summary>
+		/// Subscribes an engine action to an event.
+		/// </summary>
+		/// <param name="name">The name identifier of the event.</param>
+		/// <param name="action">The action that occurs when the event is invoked.</param>
+		public static void SubscribeEvent(string name, EngineAction<object, object, object, object> action)
+		{
+			if (events4.ContainsKey(name))
+			{
+				events4[name].AddListener(action);
+			}
+		}
 		#endregion
 
 		#region Unsubscribe Events
@@ -834,6 +898,32 @@ namespace Tynted
 			if (events2.ContainsKey(name))
 			{
 				events2[name].RemoveListener(ev);
+			}
+		}
+
+		/// <summary>
+		/// Unsubscribes an action from the event.
+		/// </summary>
+		/// <param name="name">The name of the event.</param>
+		/// <param name="ev">The action.</param>
+		public static void UnSubscribeEvent(string name, EngineAction<object, object, object> ev)
+		{
+			if (events3.ContainsKey(name))
+			{
+				events3[name].RemoveListener(ev);
+			}
+		}
+
+		/// <summary>
+		/// Unsubscribes an action from the event.
+		/// </summary>
+		/// <param name="name">The name of the event.</param>
+		/// <param name="ev">The action.</param>
+		public static void UnSubscribeEvent(string name, EngineAction<object, object, object, object> ev)
+		{
+			if (events4.ContainsKey(name))
+			{
+				events4[name].RemoveListener(ev);
 			}
 		}
 		#endregion

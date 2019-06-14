@@ -131,4 +131,88 @@ namespace Tynted.Events
 			}
 		}
 	}
+
+	public class TyntedEvent<T0, T1, T2>
+	{
+		List<EngineAction<T0, T1, T2>> actions;
+
+		public TyntedEvent()
+		{
+			actions = new List<EngineAction<T0, T1, T2>>();
+		}
+
+		internal void AddListener(EngineAction<T0, T1, T2> call)
+		{
+			if (!actions.Contains(call))
+			{
+				actions.Add(call);
+			}
+		}
+
+		internal void RemoveListener(EngineAction<T0, T1, T2> call)
+		{
+			if (actions.Contains(call))
+			{
+				actions.Remove(call);
+			}
+		}
+
+		internal void RemoveAllListeners()
+		{
+			for (int i = actions.Count - 1; i >= 0; i--)
+			{
+				actions.RemoveAt(i);
+			}
+		}
+
+		internal void Invoke(T0 arg0, T1 arg1, T2 arg2)
+		{
+			foreach (EngineAction<T0, T1, T2> action in actions)
+			{
+				action.Invoke(arg0, arg1, arg2);
+			}
+		}
+	}
+
+	public class TyntedEvent<T0, T1, T2, T3>
+	{
+		List<EngineAction<T0, T1, T2, T3>> actions;
+
+		public TyntedEvent()
+		{
+			actions = new List<EngineAction<T0, T1, T2, T3>>();
+		}
+
+		internal void AddListener(EngineAction<T0, T1, T2, T3> call)
+		{
+			if (!actions.Contains(call))
+			{
+				actions.Add(call);
+			}
+		}
+
+		internal void RemoveListener(EngineAction<T0, T1, T2, T3> call)
+		{
+			if (actions.Contains(call))
+			{
+				actions.Remove(call);
+			}
+		}
+
+		internal void RemoveAllListeners()
+		{
+			for (int i = actions.Count - 1; i >= 0; i--)
+			{
+				actions.RemoveAt(i);
+			}
+		}
+
+		internal void Invoke(T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+		{
+			foreach (EngineAction<T0, T1, T2, T3> action in actions)
+			{
+				action.Invoke(arg0, arg1, arg2, arg3);
+			}
+		}
+	}
 }
