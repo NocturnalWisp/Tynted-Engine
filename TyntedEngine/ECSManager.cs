@@ -87,6 +87,13 @@ namespace Tynted
 				//Check if has require components attribute
 				foreach (object attribute in systemType.GetCustomAttributes(false))
 				{
+					if (attribute.GetType() == typeof(Manager))
+					{
+						system.isManager = true;
+						//if manager then it shouldn't have any other attributes.
+						break;
+					}
+
 					if (attribute.GetType() == typeof(GetComponents))
 					{
 						system.types = ((GetComponents)attribute).Types;
@@ -259,7 +266,11 @@ namespace Tynted
 		{
 			foreach (System system in systems)
 			{
-				system.RemoveEntity(entities.Find(o => o.Name == name && o.Tag == tag && o.SceneName == sceneName).EntityID);
+				//Make sure not a manager system
+				if (!system.isManager)
+				{
+					system.RemoveEntity(entities.Find(o => o.Name == name && o.Tag == tag && o.SceneName == sceneName).EntityID);
+				}
 			}
 
 			//Remove all components from the entity
@@ -309,7 +320,11 @@ namespace Tynted
                         
 						foreach (System system in systems)
 						{
-							system.AddEntityComponents(entityID, GetEntityComponents(entityID));
+							//Make sure the system is not a manager.
+							if (!system.isManager)
+							{
+								system.AddEntityComponents(entityID, GetEntityComponents(entityID));
+							}
 						}
 
                         return true;
@@ -400,7 +415,11 @@ namespace Tynted
 
 							foreach (System system in systems)
 							{
-								system.RemoveEntityComponent(entityID, componentType);
+								//Make sure it's not a manager system.
+								if (!system.isManager)
+								{
+									system.RemoveEntityComponent(entityID, componentType);
+								}
 							}
 						}
 					}
@@ -511,7 +530,11 @@ namespace Tynted
 
 						foreach (System system in systems)
 						{
-							system.SetEntityComponent(entityID, component);
+							//Make sure not a manager system.
+							if (!system.isManager)
+							{
+								system.SetEntityComponent(entityID, component);
+							}
 						}
 					}
 				}

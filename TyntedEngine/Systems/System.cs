@@ -24,6 +24,7 @@ namespace Tynted
 		internal string[] tags;
 		internal bool sceneSpecific = false;
 		internal string[] scenes;
+		internal bool isManager;
 
 		public virtual void Initialize() { }
 
@@ -96,7 +97,7 @@ namespace Tynted
 		}
 		
 		/// <summary>
-		/// For the engine to remove entity components.
+		/// For the engine to set entity components.
 		/// </summary>
 		internal void SetEntityComponent(int entityID, IComponent component)
 		{
@@ -109,7 +110,7 @@ namespace Tynted
 		}
 
 		/// <summary>
-		/// For the engine to add a new entity.
+		/// For the system to add a new entity.
 		/// </summary>
 		private void AddEntity(int entityID)
 		{
@@ -121,7 +122,7 @@ namespace Tynted
 		}
 
 		/// <summary>
-		/// For the engine to remove entities.
+		/// For the system to remove entities.
 		/// </summary>
 		internal void RemoveEntity(int entityID)
 		{
@@ -133,13 +134,20 @@ namespace Tynted
 		/// <summary>
 		/// Gets the entity list that are currently in a scene.
 		/// </summary>
-		/// <returns>The entity list.</returns>
+		/// <returns>The entity list if not a manager class, otherwise null.</returns>
 		protected List<Entity> GetEntities()
 		{
-			return entities.Where(o =>
-                SceneManager.SceneExists(ECSManager.entities.Find(x => x.EntityID == o.entityID).SceneName) && 
-                !SceneManager.GetSceneByName(ECSManager.entities.Find(x => x.EntityID == o.entityID).SceneName).Paused
-            ).ToList();
+			if (!isManager)
+			{
+				return entities.Where(o =>
+					SceneManager.SceneExists(ECSManager.entities.Find(x => x.EntityID == o.entityID).SceneName) &&
+					!SceneManager.GetSceneByName(ECSManager.entities.Find(x => x.EntityID == o.entityID).SceneName).Paused
+				).ToList();
+			}
+			else
+			{
+				return null;
+			}
 		}
 	}
 }
