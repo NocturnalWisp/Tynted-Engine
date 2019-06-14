@@ -62,6 +62,10 @@
     <Compile Include="Components\IComponentList.cs" />
     <Compile Include="Components\Transform.cs" />
     <Compile Include="Components\SpriteRenderee.cs" />
+    <Compile Include="Coroutines\Coroutine.cs" />
+    <Compile Include="Coroutines\WaitForEndOfFrame.cs" />
+    <Compile Include="Coroutines\WaitForSeconds.cs" />
+    <Compile Include="Coroutines\YieldInstruction.cs" />
     <Compile Include="Entities\EntityData.cs" />
     <Compile Include="Events\TyntedEvents.cs" />
     <Compile Include="Events\TyntedActions.cs" />

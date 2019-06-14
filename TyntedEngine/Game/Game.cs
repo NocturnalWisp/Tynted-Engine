@@ -106,6 +106,7 @@ namespace Tynted
 
 				//Resets the key bindings that have the just pressed flag
 				InputManager.JustPressedReset();
+				Coroutine.EndFrame();
 			}
 		}
 
@@ -139,6 +140,7 @@ namespace Tynted
 		/// <param name="gameTime">The time tool to get various variables</param>
 		protected virtual void Update(GameTime gameTime)
 		{
+			Coroutine.Update(gameTime);
 			ECSManager.Update(gameTime);
             SceneManager.Update(gameTime);
         }

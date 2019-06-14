@@ -66,13 +66,13 @@ namespace Tynted
         public static void CreateTransform(string name, string tag = "Default", string scene = "")
         {
             ECSManager.CreateEntity(name, tag, scene);
-            ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0)));
+            ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0), 0, new Box2DNet.Common.Vec2(1, 1)));
         }
 
         public static void CreateSprite(string name, Texture texture, string tag = "Default", string scene = "")
         {
             ECSManager.CreateEntity(name, tag, scene);
-            ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0)));
+            ECSManager.AddEntityComponent(name, new Transform(new Box2DNet.Common.Vec2(0, 0), 0, new Box2DNet.Common.Vec2(1, 1)));
             ECSManager.AddEntityComponent(name, new SpriteRenderee(texture));
         }
         #endregion
