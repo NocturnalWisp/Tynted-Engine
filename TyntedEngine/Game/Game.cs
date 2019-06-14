@@ -57,6 +57,14 @@ namespace Tynted
 		}
 
 		/// <summary>
+		/// Exits the game.
+		/// </summary>
+		public void Quit()
+		{
+			WindowClosed(this, new EventArgs());
+		}
+
+		/// <summary>
 		/// Callback for when the window is closed.
 		/// </summary>
 		/// <param name="sender"></param>
@@ -66,6 +74,8 @@ namespace Tynted
 			OnClosed();
 
 			window.Close();
+
+			Dispose();
 		}
 
 		/// <summary>
@@ -148,7 +158,7 @@ namespace Tynted
 		/// </summary>
 		protected virtual void OnClosed()
         {
-            SceneManager.OnClosed();
+			SceneManager.OnClosed();
         }
 
         #region Game Extensions
