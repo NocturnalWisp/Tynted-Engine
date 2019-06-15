@@ -10,8 +10,5 @@ namespace Tynted
 	/// Applied to system to only place entities with a certain tag in the GetEntities() list.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
-	public class Manager : Attribute
-	{
-		public Manager() { }
-	}
+	public class Manager : Attribute { }
 }
