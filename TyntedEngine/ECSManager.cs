@@ -1,6 +1,7 @@
 ﻿using Tynted.Components;
 using Tynted.Events;
-using Tynted.SFML.Graphics;
+
+using OpenTK.Graphics.OpenGL4;
 
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace Tynted
 		/// Draw method applied to each system.
 		/// </summary>
 		/// <param name="window">The window to draw within.</param>
-		internal static void Draw(RenderWindow window)
+		internal static void Draw(OpenTK.GameWindow window)
 		{
 			foreach (System system in systems)
 			{

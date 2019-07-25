@@ -1,22 +1,27 @@
 ﻿using Tynted.IO;
-using Tynted.SFML.Graphics;
-using Tynted.SFML.System;
-using Tynted.SFML.Window;
+
+using OpenTK;
+using OpenTK.Graphics;
 
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Timers;
+using System.Diagnostics;
+using OpenTK.Graphics.ES20;
 
 namespace Tynted
 {
 	public class Game : IDisposable
 	{
-		RenderWindow window;
+		Window gameWindow;
+		bool running;
 
 		GameOptions gameOptions;
 		GameTime gameTime;
+		Stopwatch totalTime = new Stopwatch();
 
-        private List<GameExtension> extensions = new List<GameExtension>();
+		private List<GameExtension> extensions = new List<GameExtension>();
 
 		public Game(GameOptions options)
 		{
@@ -42,18 +47,18 @@ namespace Tynted
 				}
 			}
 
-			window = new RenderWindow(new VideoMode(1024, 768), "New Window");
+			gameWindow = new Window();
+
+			gameWindow.Run(gameOptions.GameName, gameOptions.ForceLimit ? (double?)60.0f : null);
+			GraphicsContext context = new GraphicsContext(GraphicsMode.Default, gameWindow.WindowInfo);
+			context.MakeCurrent(gameWindow.WindowInfo);
 
 			SceneManager.LoadStaticScene();
 
-			if (gameOptions.ForceLimit)
-			{
-				window.SetFramerateLimit(60);
-			}
-
-			window.Closed += WindowClosed;
-
-			RunLoop();
+			gameWindow.OnLoad += (object sender, EventArgs args) => Initialize();
+			gameWindow.OnUpdate += (object sender, FrameEventArgs args) => Update(gameTime);
+			gameWindow.OnDraw += (object sender, FrameEventArgs args) => Draw(context);
+			gameWindow.OnClosed += WindowClosed;
 		}
 
 		/// <summary>
@@ -61,7 +66,7 @@ namespace Tynted
 		/// </summary>
 		public void Quit()
 		{
-			WindowClosed(this, new EventArgs());
+			gameWindow.Close();
 		}
 
 		/// <summary>
@@ -71,43 +76,11 @@ namespace Tynted
 		/// <param name="e"></param>
 		private void WindowClosed(object sender, EventArgs e)
 		{
+			running = false;
+
 			OnClosed();
 
-			window.Close();
-
 			Dispose();
-		}
-
-		/// <summary>
-		/// The game loop.
-		/// </summary>
-		private void RunLoop()
-		{
-			Initialize();
-
-			Clock deltaClock = new Clock();
-			Clock totalTime = new Clock();
-
-			while (window.IsOpen)
-			{
-				window.DispatchEvents();
-
-				//Time stamps
-				gameTime.ElapsedTime = deltaClock.Restart();
-				gameTime.TotalTime = totalTime.ElapsedTime;
-
-				Update(gameTime);
-
-				window.Clear(Color.Black);
-
-				Draw(window);
-
-				window.Display();
-
-				//Resets the key bindings that have the just pressed flag
-				InputManager.JustPressedReset();
-				Coroutine.EndFrame();
-			}
 		}
 
 		/// <summary>
@@ -130,7 +103,7 @@ namespace Tynted
                 }
             }
 
-            InputManager.Initialize(window);
+            InputManager.Initialize(gameWindow);
             ECSManager.Initialize();
         }
 
@@ -140,20 +113,37 @@ namespace Tynted
 		/// <param name="gameTime">The time tool to get various variables</param>
 		protected virtual void Update(GameTime gameTime)
 		{
+			gameTime.TotalTime = totalTime.Elapsed;
+
 			Coroutine.Update(gameTime);
 			ECSManager.Update(gameTime);
             SceneManager.Update(gameTime);
-        }
+
+			//Resets the key bindings that have the just pressed flag
+			InputManager.JustPressedReset();
+			Coroutine.EndFrame();
+		}
 
 		/// <summary>
 		/// The draw method that loops through each system and draws them.
 		/// </summary>
 		/// <param name="renderWindow">The window to draw them in.</param>
-		protected virtual void Draw(RenderWindow renderWindow)
+		protected virtual void Draw(GraphicsContext windowContext)
 		{
+			GL.Clear(ClearBufferMask.ColorBufferBit);
+
 			ECSManager.Draw(renderWindow);
-            SceneManager.Draw(window);
+            SceneManager.Draw(gameWindow);
+
+			windowContext.SwapBuffers();
         }
+
+		private void UnloadGraphics(object sender, EventArgs args)
+		{
+
+			
+			GL.DeleteBuffer(VertexBufferObject);
+		}
 
 		/// <summary>
 		/// Callback when the game window is closed.
@@ -185,7 +175,7 @@ namespace Tynted
 				if (disposing)
 				{
 					// TODO: dispose managed state (managed objects).
-					window = null;
+					gameWindow = null;
 				}
 
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

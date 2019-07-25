@@ -1,5 +1,4 @@
 ﻿using Tynted;
-using Tynted.SFML.System;
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ namespace Tynted
 {
 	public struct GameTime
 	{
-		public Time ElapsedTime { get; set; }
-		public Time TotalTime { get; set; }
+		public TimeSpan ElapsedTime { get; set; }
+		public TimeSpan TotalTime { get; set; }
 	}
 }

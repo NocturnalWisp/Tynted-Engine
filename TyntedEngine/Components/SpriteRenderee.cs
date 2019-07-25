@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tynted;
-using Tynted.SFML.Graphics;
 
 namespace Tynted.Components
 {

@@ -8,9 +8,10 @@ namespace Tynted
 {
 	public struct GameOptions
 	{
-		private static readonly GameOptions def = new GameOptions(false);
+		private static readonly GameOptions def = new GameOptions(false, "New Game");
 
 		public bool ForceLimit { get; set; }
+		public string GameName { get; set; }
 
 		//Properties
 		public static GameOptions Default
@@ -21,9 +22,10 @@ namespace Tynted
 			}
 		}
 
-		public GameOptions(bool forceLimit = false)
+		public GameOptions(bool forceLimit = false, string name)
 		{
 			this.ForceLimit = forceLimit;
+			this.GameName = name;
 		}
 	}
 }
