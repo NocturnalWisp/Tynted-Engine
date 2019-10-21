@@ -74,8 +74,6 @@ namespace Tynted
 			OnClosed();
 
 			window.Close();
-
-			Dispose();
 		}
 
 		/// <summary>
